@@ -62,6 +62,7 @@ public class Estacionamento {
 			valorArrecadado+=x.arrecadadoTotal();	
 		}	
 		double media = valorArrecadado/usos;
+		return media;
 	}
 
 	public String top5Clientes(int mes) {
