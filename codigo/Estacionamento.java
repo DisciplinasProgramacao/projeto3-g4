@@ -1,4 +1,5 @@
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Estacionamento {
 
@@ -7,11 +8,14 @@ public class Estacionamento {
 	private List<Vaga> vagas = new ArrayList<>();
 	private int quantFileiras;
 	private int vagasPorFileira;
+	
+	
 
 	public Estacionamento(String nome, int fileiras, int vagasPorFila) {
 		this.nome=nome;
-		this.quantfileiras=fileiras;
+		this.quantFileiras=fileiras;
 		this.vagasPorFileira=vagasPorFila;
+		
 	}
 
 	public void addVeiculo(Veiculo veiculo, String idCli) {
@@ -22,18 +26,37 @@ public class Estacionamento {
 			}
 		}
 		
-	}
+	
 
 	public void addCliente(Cliente cliente) {
 		clientes.add(cliente);
 
 
 	}
-
+	
 	private void gerarVagas() {
+	
 
-		
-		
+		String[] letras = {
+			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+			"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+		};
+		int[]numeros = new int[vagasPorFileira] ;
+
+		for (int j = 0; j < vagasPorFileira; j++) {
+			numeros[j]=j+1;
+		}
+		String id;
+    for (int i = 0; i < quantFileiras; i++) {
+      for (int j = 0; j < vagasPorFileira; j++){ 
+						
+            id = letras[i] + String.valueOf(numeros[j]);
+						Vaga x = new Vaga(i,j,id);
+						vagas.add(x);
+            
+					
+        }
+    }
 	}
 
 	public void estacionar(String placa) {
