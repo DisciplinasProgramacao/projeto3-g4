@@ -10,16 +10,12 @@ public class UsoDeVaga {
 	private LocalDateTime entrada;
 	private LocalDateTime saida;
 	private double valorPago;
-	
+
 	public UsoDeVaga(Vaga vaga) {
 		this.vaga = vaga;
 		this.entrada = LocalDateTime.now();
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public double sair() {
 		this.saida = LocalDateTime.now();
 		return valorPago();
@@ -31,7 +27,14 @@ public class UsoDeVaga {
 
 	public double valorPago() {
 		int calcTempo = (int) entrada.until(saida, ChronoUnit.MINUTES);
-		valorPago =  (calcTempo / 15.0)*VALOR_FRACAO;
+		double valorTotal = (calcTempo / 15.0) * VALOR_FRACAO;
+
+		if (valorTotal > VALOR_MAXIMO) {
+			valorPago = VALOR_MAXIMO;
+		} else {
+			valorPago = valorTotal;
+		}
+
 		return valorPago;
 	}
 }
