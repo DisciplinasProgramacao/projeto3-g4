@@ -9,79 +9,76 @@ public class Estacionamento {
 	private List<Vaga> vagas = new ArrayList<>();
 	private int quantFileiras;
 	private int vagasPorFileira;
-	
-	
 
 	public Estacionamento(String nome, int fileiras, int vagasPorFila) {
-		this.nome=nome;
-		this.quantFileiras=fileiras;
-		this.vagasPorFileira=vagasPorFila;
-		
+		this.nome = nome;
+		this.quantFileiras = fileiras;
+		this.vagasPorFileira = vagasPorFila;
+
 	}
 
 	public void addVeiculo(Veiculo veiculo, String idCli) {
-		Cliente buscando = new Cliente(idCli);
-		for(Cliente x:clientes){
-			if(x.equals(buscando))
+		Cliente buscando = new Cliente("Ramon", idCli);
+		for (Cliente x : clientes) {
+			if (x.equals(buscando))
 				x.addVeiculo(veiculo);
-			}
 		}
-		
-	
+	}
 
 	public void addCliente(Cliente cliente) {
 		clientes.add(cliente);
 
-
 	}
-	
+
 	private void gerarVagas() {
-	
 
 		String[] letras = {
-			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-			"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+				"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 		};
-		int[]numeros = new int[vagasPorFileira] ;
+		int[] numeros = new int[vagasPorFileira];
 
 		for (int j = 0; j < vagasPorFileira; j++) {
-			numeros[j]=j+1;
+			numeros[j] = j + 1;
 		}
 		String id;
-    for (int i = 0; i < quantFileiras; i++) {
-      for (int j = 0; j < vagasPorFileira; j++){ 
-				
-        id = letras[i] + String.valueOf(numeros[j]);
-				Vaga x = new Vaga(i,j,id);
+		for (int i = 0; i < quantFileiras; i++) {
+			for (int j = 0; j < vagasPorFileira; j++) {
+
+				id = letras[i] + String.valueOf(numeros[j]);
+				Vaga x = new Vaga(i, j, id);
 				vagas.add(x);
-        
-        }
-    }
+
+			}
+		}
 	}
 
 	public void estacionar(String placa) {
 		Veiculo veiculo = procuraVeiculo(placa);
 		Vaga vaga = procuraVaga();
 
-		if(vaga != null && veiculo != null){
+		if (vaga != null && veiculo != null) {
 			veiculo.estacionar(vaga);
 		}
 	}
-	private Vaga procuraVaga(){
-		for(Vaga vaga : vagas){
-			if(vaga.disponivel()){
+
+	private Vaga procuraVaga() {
+		for (Vaga vaga : vagas) {
+			if (vaga.disponivel()) {
 				return vaga;
 			}
 		}
 		return null;
 	}
-	private Veiculo procuraVeiculo(String placa){
-		for(Cliente cliente: id){
+
+	private Veiculo procuraVeiculo(String placa) {
+		for (Cliente cliente : clientes) {
 			Veiculo veiculo = cliente.possuiVeiculo(placa);
 			return veiculo;
 		}
 		return null;
 	}
+
 	public double sair(String placa) {
 		Veiculo veiculo = procuraVeiculo(placa);
 		return veiculo.sair();
@@ -89,8 +86,8 @@ public class Estacionamento {
 
 	public double totalArrecadado() {
 		double total = 0;
-		for(Cliente cliente: id){
-			if(cliente != null){
+		for (Cliente cliente : clientes) {
+			if (cliente != null) {
 				total += cliente.arrecadadoTotal();
 			}
 		}
@@ -99,8 +96,8 @@ public class Estacionamento {
 
 	public double arrecadacaoNoMes(int mes) {
 		double totalMes = 0;
-		for(Cliente cliente: id){
-			if(cliente != null){
+		for (Cliente cliente : clientes) {
+			if (cliente != null) {
 				totalMes += cliente.arrecadadoNoMes(mes);
 			}
 		}
@@ -109,50 +106,56 @@ public class Estacionamento {
 
 	public double valorMedioPorUso() {
 
-		double usos=0;
-		double valorArrecadado=0;
+		double usos = 0;
+		double valorArrecadado = 0;
 
-		for(Cliente x:clientes){
-			usos+=x.totalDeUsos();
-			valorArrecadado+=x.arrecadadoTotal();	
-		}	
-		double media = valorArrecadado/usos;
+		for (Cliente x : clientes) {
+			usos += x.totalDeUsos();
+			valorArrecadado += x.arrecadadoTotal();
+		}
+		double media = valorArrecadado / usos;
 		return media;
 	}
 
 	public String top5Clientes(int mes) {
 		List<Cliente> clienteDoMes = new ArrayList<>();
-	
+
 		for (Cliente x : clientes) {
-			if(x.arrecadadoNoMes(mes)>0){
-					clienteDoMes.add(x);
+			if (x.arrecadadoNoMes(mes) > 0) {
+				clienteDoMes.add(x);
 			}
 		}
-		clienteDoMes.sort(new Comparator<Cliente>(){// utiliza o sort para ordernar a lista clienteDoMes; Utiliza a interface Comparator para estabelecer uma regra de comparação, realizando uma instanciação anonima;
-        @Override//reescrevemos a regra compare da interface comparator
-        public int compare(Cliente cliente1, Cliente cliente2) {// utiliza o metodo compare da interface comparator (no qual se der negativo cliente1 vem antes do 2 , se der zero sao iguais e se der positivo cliente1 vem depois do 2)
-            double arrecadacao1 = cliente1.arrecadadoNoMes(mes);
-            double arrecadacao2 = cliente2.arrecadadoNoMes(mes);
-            // Ordene em ordem decrescente
-            return Double.compare(arrecadacao2, arrecadacao1);//ordenamos o compare dessa maneira para podermos ter a Lista decrescente. Ex.: se arrecadaçao cliente 2 > arrecadaçao cliente1 = +1 logo cliente1 vem depois do cliente2;
-        }
-    });
+		clienteDoMes.sort(new Comparator<Cliente>() {// utiliza o sort para ordernar a lista clienteDoMes; Utiliza a
+														// interface Comparator para estabelecer uma regra de
+														// comparação, realizando uma instanciação anonima;
+			@Override // reescrevemos a regra compare da interface comparator
+			public int compare(Cliente cliente1, Cliente cliente2) {// utiliza o metodo compare da interface comparator
+																	// (no qual se der negativo cliente1 vem antes do 2
+																	// , se der zero sao iguais e se der positivo
+																	// cliente1 vem depois do 2)
+				double arrecadacao1 = cliente1.arrecadadoNoMes(mes);
+				double arrecadacao2 = cliente2.arrecadadoNoMes(mes);
+				// Ordene em ordem decrescente
+				return Double.compare(arrecadacao2, arrecadacao1);// ordenamos o compare dessa maneira para podermos ter
+																	// a Lista decrescente. Ex.: se arrecadaçao cliente
+																	// 2 > arrecadaçao cliente1 = +1 logo cliente1 vem
+																	// depois do cliente2;
+			}
+		});
 
-		int maxClientes = Math.min(5, clienteDoMes.size());//Math.min estabelece que o tamanho maximo da lista seja 5, 
+		int maxClientes = Math.min(5, clienteDoMes.size());// Math.min estabelece que o tamanho maximo da lista seja 5,
 
 		StringBuilder top5 = new StringBuilder();
 
-		top5.append("Top 5 clientes do mês "+ mes+" :\n");
+		top5.append("Top 5 clientes do mês " + mes + " :\n");
 
-		for(int i=0;i<maxClientes;i++){
-				Cliente cliente = clienteDoMes.get(i);
-				top5.append(cliente+"\n");//utiliza o metodo toString() da classe cliente; 
-			}
+		for (int i = 0; i < maxClientes; i++) {
+			Cliente cliente = clienteDoMes.get(i);
+			top5.append(cliente + "\n");// utiliza o metodo toString() da classe cliente;
+		}
 
 		return top5.toString();
-	
+
 	}
-		
+
 }
-
-
