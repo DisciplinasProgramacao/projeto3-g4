@@ -74,4 +74,10 @@ public class Veiculo {
     public int totalDeUsos() {
         return usos.size();
     }
+
+    public String getPlaca() {
+        return placa;
+    }
 }
+
+

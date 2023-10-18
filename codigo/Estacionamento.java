@@ -7,8 +7,8 @@ public class Estacionamento {
 	private String nome;
 	private List<Cliente> clientes = new ArrayList<>();
 	private List<Vaga> vagas = new ArrayList<>();
-	private int quantFileiras;
-	private int vagasPorFileira;
+	protected int quantFileiras;
+	protected int vagasPorFileira;
 
 	public Estacionamento(String nome, int fileiras, int vagasPorFila) {
 		this.nome = nome;
@@ -18,37 +18,22 @@ public class Estacionamento {
 	}
 
 	public void addVeiculo(Veiculo veiculo, String idCli) {
-		Cliente buscando = new Cliente("Ramon", idCli);
-		for (Cliente x : clientes) {
-			if (x.equals(buscando))
-				x.addVeiculo(veiculo);
+		for (Cliente cliente : clientes) {
+			if (cliente.getId().equals(idCli)) {
+				cliente.addVeiculo(veiculo);
+			}
 		}
 	}
 
 	public void addCliente(Cliente cliente) {
 		clientes.add(cliente);
-
 	}
 
-	private void gerarVagas() {
-
-		String[] letras = {
-				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-				"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-		};
-		int[] numeros = new int[vagasPorFileira];
-
-		for (int j = 0; j < vagasPorFileira; j++) {
-			numeros[j] = j + 1;
-		}
-		String id;
+	public void gerarVagas() {
 		for (int i = 0; i < quantFileiras; i++) {
 			for (int j = 0; j < vagasPorFileira; j++) {
-
-				id = letras[i] + String.valueOf(numeros[j]);
-				Vaga x = new Vaga(i, j, id);
+				Vaga x = new Vaga(i, j);
 				vagas.add(x);
-
 			}
 		}
 	}
@@ -62,7 +47,7 @@ public class Estacionamento {
 		}
 	}
 
-	private Vaga procuraVaga() {
+	public Vaga procuraVaga() {
 		for (Vaga vaga : vagas) {
 			if (vaga.disponivel()) {
 				return vaga;
@@ -156,6 +141,16 @@ public class Estacionamento {
 
 		return top5.toString();
 
+	}
+
+	public int getArrayClientes(){
+		int tamanhoClientes = clientes.size();
+		return tamanhoClientes;
+	}
+
+		public int getArrayVagas(){
+		int quantVagas = vagas.size();
+		return quantVagas;
 	}
 
 }

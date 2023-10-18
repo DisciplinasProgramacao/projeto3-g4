@@ -12,10 +12,11 @@ public class Cliente {
 
 	public void addVeiculo(Veiculo veiculo) {
 		for (int i = 0; i < veiculos.length; i++) {
-            if (veiculos[i] == null && !veiculos[i].equals(veiculo)) {
-                veiculos[i] = veiculo;
-            }
-        }
+			if (veiculos[i] == null) {
+				veiculos[i] = veiculo;
+				return; // Adicionou o veículo, saia do método.
+			}
+		}
 	}
 
 	public Veiculo possuiVeiculo(String placa) {
@@ -71,4 +72,17 @@ public class Cliente {
 		return arrecadadoVeiculoMes;	
 		}
 
+    public Object getId() {
+        return id;
+    }
+
+public int getArrayVeiculos() {
+    int count = 0;
+    for (Veiculo veiculo : veiculos) {
+        if (veiculo != null) {
+            count++;
+        }
+    }
+    return count;
+}
 }
