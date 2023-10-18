@@ -16,7 +16,7 @@ public class Estacionamento {
 		this.vagasPorFileira = vagasPorFila;
 
 	}
-
+	
 	public void addVeiculo(Veiculo veiculo, String idCli) {
 		Cliente buscando = new Cliente("Ramon", idCli);
 		for (Cliente x : clientes) {
