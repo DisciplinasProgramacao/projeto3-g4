@@ -72,6 +72,21 @@ public class Cliente {
 		return arrecadadoVeiculoMes;	
 		}
 
+		public void pesquisarHistorico(String data, String placa) {
+			Veiculo buscando = possuiVeiculo(placa);
+		
+			if (buscando != null) {
+				for (UsoDeVaga uso : buscando.usos) {
+					if (uso.ehDaData(data)) {
+						System.out.println("Placa: " + placa);
+						System.out.println("Data: " + data);
+						System.out.println("Valor Pago: " + uso.valorPago());
+						System.out.println("--------------");
+					}
+				}
+			}
+		}
+
     public Object getId() {
         return id;
     }
