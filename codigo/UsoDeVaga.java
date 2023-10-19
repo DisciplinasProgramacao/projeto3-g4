@@ -6,11 +6,7 @@ public class UsoDeVaga {
 	private static final double FRACAO_USO = 0.25;
 	private static final double VALOR_FRACAO = 4.0;
 	private static final double VALOR_MAXIMO = 50.0;
-	private static final double VALOR_MANOBRISTA = 5.0;
-    private static final double VALOR_LAVAGEM = 20.0;
-    private static final double VALOR_POLIMENTO = 45.0;
-    private static final int TEMPO_MIN_LAVAGEM = 60; 
-    private static final int TEMPO_MIN_POLIMENTO = 120;
+	
 
 	private Vaga vaga;
 	private LocalDateTime entrada;
@@ -46,21 +42,10 @@ public class UsoDeVaga {
 		return valorPago;
 	}
 
-	public void contratarManobrista() {
-        valorServicos += VALOR_MANOBRISTA;
-    }
+	public void contratarServico(Servico servico){
 
-    public void contratarLavagem() {
-        if (servicoMinPermanencia < TEMPO_MIN_LAVAGEM) {
-            servicoMinPermanencia = TEMPO_MIN_LAVAGEM;
-        }
-        valorServicos += VALOR_LAVAGEM;
-    }
+		valorServicos = servico.getValor();
 
-    public void contratarPolimento() {
-        if (servicoMinPermanencia < TEMPO_MIN_POLIMENTO) {
-            servicoMinPermanencia = TEMPO_MIN_POLIMENTO;
-        }
-        valorServicos += VALOR_POLIMENTO;
-    }
+	
+	}
 }

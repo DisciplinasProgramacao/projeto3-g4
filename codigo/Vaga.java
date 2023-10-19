@@ -1,6 +1,6 @@
 public class Vaga {
 
-	private String id;
+	private String idVaga;
 	private boolean disponivel;
 	private static int numeroSequencial = 1;
 	private static char letraSequencial = 'A';
@@ -10,13 +10,19 @@ public class Vaga {
 		if (fila >= 0 && fila < 26) {
 
 			char letra = (char) ('A' + fila);
-			this.id = letra + Integer.toString(numero);
+			this.idVaga = letra + Integer.toString(numero);
 
 		} else {
 
-			this.id = letraSequencial + Integer.toString(numeroSequencial);
+			this.idVaga = letraSequencial + Integer.toString(numeroSequencial);
 			numeroSequencial++;
 		}
+		this.disponivel = true;
+	}
+
+	public Vaga(String id){
+
+		idVaga = id;
 		this.disponivel = true;
 	}
 

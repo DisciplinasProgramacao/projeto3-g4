@@ -46,7 +46,7 @@ public class Estacionamento {
 			for (int j = 0; j < vagasPorFileira; j++) {
 
 				id = letras[i] + String.valueOf(numeros[j]);
-				Vaga x = new Vaga(i, j, id);
+				Vaga x = new Vaga(id);
 				vagas.add(x);
 
 			}
