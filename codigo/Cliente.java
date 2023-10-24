@@ -20,12 +20,10 @@ public class Cliente {
 	}
 
 	public Veiculo possuiVeiculo(String placa) {
-		Veiculo buscando = new Veiculo(placa);
-		for (Veiculo v: veiculos){
-			if (v.equals(buscando)){
-				return v;
-			}
-			
+		for (Veiculo veiculo: veiculos){
+			if (veiculo.getPlaca().equals(placa)){
+				return veiculo;
+			}	
 		}
 		return null;
 	}

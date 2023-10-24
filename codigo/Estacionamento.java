@@ -50,7 +50,6 @@ public class Estacionamento {
     }
 
     public boolean estacionar(String placa) {
-        gerarVagas();
         boolean estacionado = false;
         Veiculo veiculo = procuraVeiculo(placa);
         Vaga vaga = procuraVaga();
@@ -72,15 +71,15 @@ public class Estacionamento {
         return null;
     }
 
-    public Veiculo procuraVeiculo(String placa) {
-        for (Cliente cliente : clientes) {
-            Veiculo veiculo = cliente.possuiVeiculo(placa);
-            if (veiculo != null) {
-                return veiculo;
-            }
-        }
-        return null;
-    }
+	public Veiculo procuraVeiculo(String placa) {
+		for (Cliente cliente : clientes) {
+			Veiculo veiculo = cliente.possuiVeiculo(placa);
+			if (veiculo != null) {
+				return veiculo;
+			}
+		}
+		return null;
+	}
 
 
 	public double sair(String placa) {
@@ -160,6 +159,21 @@ public class Estacionamento {
 
 		return top5.toString();
 
+	}
+
+	public int getNumVagas() {
+		int numVagas = gerarVagas();
+		return numVagas;
+	}
+
+	public int getVagasLivres() {
+		int numVagas = 0;
+		for (Vaga vaga: vagas){
+			if (vaga.disponivel()){
+				numVagas++;
+			}
+		}
+		return numVagas;
 	}
 
 }
