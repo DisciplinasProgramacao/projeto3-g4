@@ -71,7 +71,7 @@ public class Cliente {
 
 		return arrecadadoVeiculoMes;	
 		}
-
+/* 
 		public void pesquisarHistorico(String data, String placa) {
 			Veiculo buscando = possuiVeiculo(placa);
 		
@@ -86,18 +86,10 @@ public class Cliente {
 				}
 			}
 		}
-
+ */
     public Object getId() {
         return id;
     }
 
-public int getArrayVeiculos() {
-    int count = 0;
-    for (Veiculo veiculo : veiculos) {
-        if (veiculo != null) {
-            count++;
-        }
-    }
-    return count;
-}
+
 }

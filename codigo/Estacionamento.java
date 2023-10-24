@@ -7,8 +7,8 @@ public class Estacionamento {
 	private String nome;
 	private List<Cliente> clientes = new ArrayList<>();
 	private List<Vaga> vagas = new ArrayList<>();
-	protected int quantFileiras;
-	protected int vagasPorFileira;
+	private int quantFileiras;
+	private int vagasPorFileira;
 
 	public Estacionamento(String nome, int fileiras, int vagasPorFila) {
 		this.nome = nome;
@@ -17,52 +17,71 @@ public class Estacionamento {
 
 	}
 
-	public void addVeiculo(Veiculo veiculo, String idCli) {
-		for (Cliente cliente : clientes) {
-			if (cliente.getId().equals(idCli)) {
-				cliente.addVeiculo(veiculo);
-			}
-		}
-	}
+    public boolean addVeiculo(Veiculo veiculo, String idCli) {
+        boolean resposta = false;
+        for (Cliente cliente : clientes) {
+            if (cliente.getId().equals(idCli)) {
+                cliente.addVeiculo(veiculo);
+                resposta = true;
+            }
+        }
+        return resposta;
+    }
 
-	public void addCliente(Cliente cliente) {
-		clientes.add(cliente);
-	}
+    public boolean addCliente(Cliente cliente) {
+        boolean resposta = false;
+        if (!clientes.contains(cliente)) {
+            clientes.add(cliente);
+            resposta = true;
+        }
+        return resposta;
+    }
 
-	public void gerarVagas() {
-		for (int i = 0; i < quantFileiras; i++) {
-			for (int j = 0; j < vagasPorFileira; j++) {
-				Vaga x = new Vaga(i, j);
-				vagas.add(x);
-			}
-		}
-	}
+    private int gerarVagas() {
+        int numVagas = 0;
+        for (int i = 0; i < quantFileiras; i++) {
+            for (int j = 0; j < vagasPorFileira; j++) {
+                Vaga x = new Vaga(i, j);
+                vagas.add(x);
+                numVagas++;
+            }
+        }
+        return numVagas;
+    }
 
-	public void estacionar(String placa) {
-		Veiculo veiculo = procuraVeiculo(placa);
-		Vaga vaga = procuraVaga();
+    public boolean estacionar(String placa) {
+        gerarVagas();
+        boolean estacionado = false;
+        Veiculo veiculo = procuraVeiculo(placa);
+        Vaga vaga = procuraVaga();
 
-		if (vaga != null && veiculo != null) {
-			veiculo.estacionar(vaga);
-		}
-	}
+        if (vaga != null && veiculo != null) {
+            veiculo.estacionar(vaga);
+            estacionado = true;
+        }
+		return estacionado;
+    }
 
-	public Vaga procuraVaga() {
-		for (Vaga vaga : vagas) {
-			if (vaga.disponivel()) {
-				return vaga;
-			}
-		}
-		return null;
-	}
+    public Vaga procuraVaga() {
+        gerarVagas();
+        for (Vaga vaga : vagas) {
+            if (vaga.disponivel()) {
+                return vaga;
+            }
+        }
+        return null;
+    }
 
-	private Veiculo procuraVeiculo(String placa) {
-		for (Cliente cliente : clientes) {
-			Veiculo veiculo = cliente.possuiVeiculo(placa);
-			return veiculo;
-		}
-		return null;
-	}
+    public Veiculo procuraVeiculo(String placa) {
+        for (Cliente cliente : clientes) {
+            Veiculo veiculo = cliente.possuiVeiculo(placa);
+            if (veiculo != null) {
+                return veiculo;
+            }
+        }
+        return null;
+    }
+
 
 	public double sair(String placa) {
 		Veiculo veiculo = procuraVeiculo(placa);
@@ -141,16 +160,6 @@ public class Estacionamento {
 
 		return top5.toString();
 
-	}
-
-	public int getArrayClientes(){
-		int tamanhoClientes = clientes.size();
-		return tamanhoClientes;
-	}
-
-		public int getArrayVagas(){
-		int quantVagas = vagas.size();
-		return quantVagas;
 	}
 
 }
