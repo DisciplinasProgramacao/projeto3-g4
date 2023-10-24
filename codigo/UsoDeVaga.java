@@ -22,11 +22,18 @@ public class UsoDeVaga {
 	}
 
 	public double sair() {
-
-		
 		this.saida = LocalDateTime.now();
-		return valorPago();
+		int tempoPermanenciaMinutos = (int) entrada.until(saida, ChronoUnit.MINUTES);
+		
+		if (tempoPermanenciaMinutos >= servico.getTempo()) {
+			return valorPago();
+		} else {
+			
+			System.out.println("Tempo de permanência insuficiente para sair.");
+			return 0.0; 
+		}
 	}
+	
 
 	public boolean ehDoMes(int mes) {
 		return entrada.getMonthValue() == mes;
