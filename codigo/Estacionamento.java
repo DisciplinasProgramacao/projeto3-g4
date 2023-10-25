@@ -16,7 +16,11 @@ public class Estacionamento {
 		this.vagasPorFileira = vagasPorFila;
 
 	}
-
+	/**
+	 * Cadastra um veículo à um cliente previamente cadastrado no sitema do estacionamento;
+	 * @param veiculo veículo a ser adicionado;
+	 * @param idCli string que identifica o cliente;
+	 */
 	public void addVeiculo(Veiculo veiculo, String idCli) {
 		Cliente buscando = new Cliente("Ramon", idCli);
 		for (Cliente x : clientes) {
@@ -24,12 +28,18 @@ public class Estacionamento {
 				x.addVeiculo(veiculo);
 		}
 	}
-
+	/**
+	 * Cadastra um cliente novo no estacionamento;
+	 * @param cliente cliente novo a ser cadastrado.
+	 */
 	public void addCliente(Cliente cliente) {
 		clientes.add(cliente);
 
 	}
-
+	/**
+	 * Método que utiliza do número de fileiras e da quantidade de vagas por fileira para criar
+	 * automaticamente vagas com seus respectivos identificadores. Ex.: "A1";
+	 */
 	private void gerarVagas() {
 
 		String[] letras = {
@@ -52,7 +62,10 @@ public class Estacionamento {
 			}
 		}
 	}
-
+	/**
+	 * Esse método recebe um veiculo que deseja estecionar e caso tenha vagas disponíveis estaciona o veiculo na vaga em questão;
+	 * @param placa String da placa do veículo que deseja estacionar em questão;
+	 */
 	public void estacionar(String placa) {
 		Veiculo veiculo = procuraVeiculo(placa);
 		Vaga vaga = procuraVaga();
@@ -61,7 +74,10 @@ public class Estacionamento {
 			veiculo.estacionar(vaga);
 		}
 	}
-
+	/**
+	 * Esse método procura alguma vaga disponível no estacionamento.
+	 * @return a vaga caso ela esteja disponível, caso não tenha nenhuma vaga disponível retorna null
+	 */
 	private Vaga procuraVaga() {
 		for (Vaga vaga : vagas) {
 			if (vaga.disponivel()) {
@@ -70,7 +86,11 @@ public class Estacionamento {
 		}
 		return null;
 	}
-
+	/**
+	 * Esse método tem como objetivo verificar se o veículo em questão já está cadastrado no cliente
+	 * @param placa String da placa do veículo a ser verificado
+	 * @return  retorna o veículo se o cliente já possuir o veículo cadastrado em questão, caso contrario retorna null.
+	 */
 	private Veiculo procuraVeiculo(String placa) {
 		for (Cliente cliente : clientes) {
 			Veiculo veiculo = cliente.possuiVeiculo(placa);
@@ -78,12 +98,19 @@ public class Estacionamento {
 		}
 		return null;
 	}
-
+	/**
+	 * Esse método tem como objetivo pegar um veículo que esta estacionado retirá-lo da vaga e mostrar o tanto a ser cobrado;
+	 * @param placa string da placa do veiculo que está saindo da vaga;
+	 * @return tira o veiculo do estacionamento e retorna o valor a ser pago;
+	 */
 	public double sair(String placa) {
 		Veiculo veiculo = procuraVeiculo(placa);
 		return veiculo.sair();
 	}
-
+	/**
+	 * Esse método tem como objetivo ver o total arrecado pelo estacionamento;
+	 * @return valor do total arrecadado pelo estacionamento;
+	 */
 	public double totalArrecadado() {
 		double total = 0;
 		for (Cliente cliente : clientes) {
@@ -93,6 +120,11 @@ public class Estacionamento {
 		}
 		return total;
 	}
+	/**
+	 * Esse método recebe um mês como parametro para ser analisado e calcula o total de arrecadação no respectivo mês.
+	 * @param mes , mes em questão a ser analisado;
+	 * @return total arrecadado no mês de interesse;
+	 */
 
 	public double arrecadacaoNoMes(int mes) {
 		double totalMes = 0;
@@ -103,7 +135,11 @@ public class Estacionamento {
 		}
 		return totalMes;
 	}
-
+	/**
+	 * Esse método tem como objetivo pegar o total de usos dos clientes do estacionamente e o total de arrecadação dos clientes e 
+	 * retornar o valor medio por uso.
+	 * @return o valor medio por uso no estacionamento
+	 */
 	public double valorMedioPorUso() {
 
 		double usos = 0;
@@ -116,6 +152,12 @@ public class Estacionamento {
 		double media = valorArrecadado / usos;
 		return media;
 	}
+	/**
+	 * Esse método recebe um mes como parametro e verifica quais clientes da Lista clientes utilizou o estacionamento no mes em 
+	 * questão, cria uma nova lista organizada de maneira decrescete levando em consideração a arrecadação dos clientes no mes.
+	 * @param mes , mes de interesse a ser analisado
+	 * @return retorna uma string com os 5 clientes que mais gastaram no estacionamento
+	 */
 
 	public String top5Clientes(int mes) {
 		List<Cliente> clienteDoMes = new ArrayList<>();
@@ -125,25 +167,16 @@ public class Estacionamento {
 				clienteDoMes.add(x);
 			}
 		}
-		clienteDoMes.sort(new Comparator<Cliente>() {// utiliza o sort para ordernar a lista clienteDoMes; Utiliza a
-														// interface Comparator para estabelecer uma regra de
-														// comparação, realizando uma instanciação anonima;
-			@Override // reescrevemos a regra compare da interface comparator
-			public int compare(Cliente cliente1, Cliente cliente2) {// utiliza o metodo compare da interface comparator
-																	// (no qual se der negativo cliente1 vem antes do 2
-																	// , se der zero sao iguais e se der positivo
-																	// cliente1 vem depois do 2)
+		clienteDoMes.sort(new Comparator<Cliente>() {
+			public int compare(Cliente cliente1, Cliente cliente2) {	
 				double arrecadacao1 = cliente1.arrecadadoNoMes(mes);
 				double arrecadacao2 = cliente2.arrecadadoNoMes(mes);
-				// Ordene em ordem decrescente
-				return Double.compare(arrecadacao2, arrecadacao1);// ordenamos o compare dessa maneira para podermos ter
-																	// a Lista decrescente. Ex.: se arrecadaçao cliente
-																	// 2 > arrecadaçao cliente1 = +1 logo cliente1 vem
-																	// depois do cliente2;
+				
+				return Double.compare(arrecadacao2, arrecadacao1);
 			}
 		});
 
-		int maxClientes = Math.min(5, clienteDoMes.size());// Math.min estabelece que o tamanho maximo da lista seja 5,
+		int maxClientes = Math.min(5, clienteDoMes.size());
 
 		StringBuilder top5 = new StringBuilder();
 
@@ -151,7 +184,7 @@ public class Estacionamento {
 
 		for (int i = 0; i < maxClientes; i++) {
 			Cliente cliente = clienteDoMes.get(i);
-			top5.append(cliente + "\n");// utiliza o metodo toString() da classe cliente;
+			top5.append(cliente + "\n");
 		}
 
 		return top5.toString();
