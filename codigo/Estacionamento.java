@@ -14,6 +14,7 @@ public class Estacionamento {
 		this.nome = nome;
 		this.quantFileiras = fileiras;
 		this.vagasPorFileira = vagasPorFila;
+		gerarVagas();
 
 	}
 	
