@@ -37,4 +37,6 @@ public class UsoDeVaga {
 
 		return valorPago;
 	}
+
+
 }

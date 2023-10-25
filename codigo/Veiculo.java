@@ -75,6 +75,10 @@ public class Veiculo {
         return usos.size();
     }
 
+	public List<UsoDeVaga> getUsos (){
+            return usos;
+	}
+
     public String getPlaca() {
         return placa;
     }
