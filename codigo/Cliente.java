@@ -72,7 +72,6 @@ public class Cliente {
 	}
 
 	public String pesquisarHistorico(int mes, String placa) {
-		int idasNoMes = 0;
 		StringBuilder relatorio = new StringBuilder();
 
 		Veiculo buscando = possuiVeiculo(placa);
@@ -87,7 +86,9 @@ public class Cliente {
 					relatorio.append("--------------").append("\n");
 				}
 			}
-			relatorio.append("Total de Dias: ").append(idasNoMes).append("\n");
+			relatorio.append("Total de Uso: ").append(totalDeUsos()).append("\n");
+			relatorio.append("Arrecadado pelo veiculo: ").append(placa).append(" ").append(arrecadadoPorVeiculo(placa)).append("\n");
+			relatorio.append("Arrecadado Total: ").append(arrecadadoTotal())append("\n");
 		}
 
 		return relatorio.toString();
