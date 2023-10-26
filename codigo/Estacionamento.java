@@ -14,7 +14,7 @@ public class Estacionamento {
 		this.nome = nome;
 		this.quantFileiras = fileiras;
 		this.vagasPorFileira = vagasPorFila;
-
+		gerarVagas();
 	}
 	/**
 	 * Cadastra um veículo à um cliente previamente cadastrado no sitema do estacionamento;
@@ -41,22 +41,12 @@ public class Estacionamento {
 	 * automaticamente vagas com seus respectivos identificadores. Ex.: "A1";
 	 */
 	private void gerarVagas() {
-
-		String[] letras = {
-				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-				"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-		};
-		int[] numeros = new int[vagasPorFileira];
-
-		for (int j = 0; j < vagasPorFileira; j++) {
-			numeros[j] = j + 1;
-		}
-		String id;
+		
 		for (int i = 0; i < quantFileiras; i++) {
-			for (int j = 0; j < vagasPorFileira; j++) {
+			for (int j = 1; j <= vagasPorFileira; j++) {
 
-				id = letras[i] + String.valueOf(numeros[j]);
-				Vaga x = new Vaga(id);
+				
+				Vaga x = new Vaga(i,j);
 				vagas.add(x);
 
 			}

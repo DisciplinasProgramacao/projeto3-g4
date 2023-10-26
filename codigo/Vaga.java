@@ -20,11 +20,6 @@ public class Vaga {
 		this.disponivel = true;
 	}
 
-	public Vaga(String id){
-
-		idVaga = id;
-		this.disponivel = true;
-	}
 
 	/**
 	 * Método utilizado para ocupar uma vaga, ele valida se a vaga está vazia, e ocupa a vaga.
