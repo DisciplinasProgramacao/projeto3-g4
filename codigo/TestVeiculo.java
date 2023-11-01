@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class testVeiculo{
+public class TestVeiculo {
     static Veiculo veiculo;
     static Vaga vaga;
     static UsoDeVaga usoDeVaga;

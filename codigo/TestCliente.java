@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,9 +13,6 @@ public class TestCliente {
     static Vaga vaga;
     static UsoDeVaga uso;
     static final String PLACA = "321GDE";
-
-    static DecimalFormat df = new DecimalFormat("#,###.00");
-
     @BeforeAll
     public static void init() {
         veiculo = new Veiculo(PLACA);
@@ -64,16 +60,16 @@ public class TestCliente {
 
     @Test
     public void retornaArrecadacaoPorVeiculoCorretamente() {
-        assertEquals("2,67", df.format(cliente.arrecadadoPorVeiculo(PLACA)));
+        assertEquals(4, cliente.arrecadadoPorVeiculo(PLACA));
     }
 
     @Test
     public void retornaArrecadacaoTotalCorretamente() {
-        assertEquals("2,67", df.format(cliente.arrecadadoTotal()));
+        assertEquals(4, cliente.arrecadadoTotal());
     }
 
     @Test
     public void retornaArrecadacaoNoMesCorretamente() {
-        assertEquals("2,67", df.format(cliente.arrecadadoNoMes(LocalDate.now().getMonthValue())));
+        assertEquals(4, cliente.arrecadadoNoMes(LocalDate.now().getMonthValue()));
     }
 }
