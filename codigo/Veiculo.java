@@ -24,7 +24,10 @@ public class Veiculo {
      * @param vaga
      */
     public void estacionar(Vaga vaga) {
-        if (vaga.disponivel()) {
+        //procurar o último uso de vaga
+        //verificar se já saiu deste último uso
+
+        if (vaga.disponivel() && !usos.contains(vaga)) {
             usos.add(new UsoDeVaga(vaga));
         }
     }

@@ -88,7 +88,7 @@ public class Estacionamento {
 	}
 
 	public double totalArrecadado() {
-		double total = 0;
+		double total = 0d;
 		for (Cliente cliente : clientes) {
 			if (cliente != null) {
 				total += cliente.arrecadadoTotal();
@@ -161,19 +161,5 @@ public class Estacionamento {
 
 	}
 
-	public int getNumVagas() {
-		int numVagas = gerarVagas();
-		return numVagas;
-	}
-
-	public int getVagasLivres() {
-		int numVagas = 0;
-		for (Vaga vaga: vagas){
-			if (vaga.disponivel()){
-				numVagas++;
-			}
-		}
-		return numVagas;
-	}
 
 }

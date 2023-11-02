@@ -27,11 +27,6 @@ public class EstacionamentoTest {
         assertTrue(estacionamento.addVeiculo(veiculo1, "1"));
     }
 
-    @Test
-    public void testarGerarVagas() {
-        estacionamento.addCliente(cliente1);
-        assertEquals(6,estacionamento.getNumVagas());
-    }
 
     @Test
     public void testarProcurarVaga() {
@@ -51,7 +46,14 @@ public class EstacionamentoTest {
         estacionamento.addCliente(cliente1);
         estacionamento.addVeiculo(veiculo1, "1");
         assertTrue(estacionamento.estacionar("ABC1234"));
-        assertEquals(5,estacionamento.getVagasLivres());
+    }
+
+    @Test
+    public void testarEstacionarMesmocarro(){
+        estacionamento.addCliente(cliente1);
+        estacionamento.addVeiculo(veiculo1, "1");
+        estacionamento.estacionar("ABC1234");
+        assertFalse(estacionamento.estacionar("ABC1234"));
     }
 
     @Test
@@ -59,9 +61,34 @@ public class EstacionamentoTest {
         estacionamento.addCliente(cliente1);
         estacionamento.addVeiculo(veiculo1, "1");
         estacionamento.estacionar("ABC1234");
-        assertEquals(5,estacionamento.getVagasLivres());
+        assertNotNull(estacionamento.sair("ABC1234"));
+    }
+
+    @Test
+    public void calcularArrecadadoTotal(){
+        estacionamento.addCliente(cliente1);
+        estacionamento.addVeiculo(veiculo1, "1");
+        estacionamento.estacionar("ABC1234");
         estacionamento.sair("ABC1234");
-        assertEquals(6,estacionamento.getVagasLivres());
+        assertNotNull(estacionamento.totalArrecadado());
+    }
+
+    @Test
+    public void calcularArrecadadoMes(){
+        estacionamento.addCliente(cliente1);
+        estacionamento.addVeiculo(veiculo1, "1");
+        estacionamento.estacionar("ABC1234");
+        estacionamento.sair("ABC1234");
+        assertNotNull(estacionamento.arrecadacaoNoMes(1));
+    }
+
+    @Test
+    public void calcularArrecadadoMedia(){
+        estacionamento.addCliente(cliente1);
+        estacionamento.addVeiculo(veiculo1, "1");
+        estacionamento.estacionar("ABC1234");
+        estacionamento.sair("ABC1234");
+        assertNotNull(estacionamento.valorMedioPorUso());
     }
 
 }

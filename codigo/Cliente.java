@@ -18,12 +18,17 @@ public class Cliente {
      * @param veiculo	Recebe veiculo como parâmetro para vincular ao cliente.
      */
 	public void addVeiculo(Veiculo veiculo) {
-		for (int i = 0; i < veiculos.length; i++) {
-			if (veiculos[i] == null) {
-				veiculos[i] = veiculo;
-				return; // Adicionou o veículo, saia do método.
+		boolean campoLivre = false;
+		int pos =-1;
+		for (int i = 0; i < veiculos.length && !campoLivre; i++) {
+			if(veiculos[i]==null){
+				campoLivre = true;
+				pos = i;
 			}
 		}
+		if(pos!=-1)
+			veiculos[pos] = veiculo;
+
 	}
 
     /**
@@ -127,6 +132,7 @@ public class Cliente {
 
 		return relatorio.toString();
 	}
+
 
 	public Object getId() {
 		return id;
