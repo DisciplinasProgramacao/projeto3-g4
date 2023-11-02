@@ -1,11 +1,17 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;  // Import the Scanner class
 
 public class App {
     static Estacionamento estacionamento = null;
+    static List<Estacionamento> estacionamentosAletorios = new ArrayList<>();
     static String idClientes = "1";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        GerarDados();
 
         int escolha;
 
@@ -42,7 +48,7 @@ public class App {
     }
 
     public static boolean validaEstacionamento(){
-        if(estacionamento == null){
+        if(estacionamentosAletorios == null){
             return false;
         } return true;
     };
@@ -59,26 +65,6 @@ public class App {
             subEscolha = scanner.nextInt();
 
             switch (subEscolha) {
-                case 1:
-                    System.out.println("Opção Cadastrar Estacionamento selecionada.");
-                    if (validaEstacionamento()){
-                        System.out.println("Estacionamento já cadastrado.");
-                        break;
-                    } else {
-                        scanner.nextLine();
-
-                        System.out.print("Digite o nome do estacionamento: ");
-                        String nome = scanner.nextLine();
-
-                        System.out.print("Digite o número de fileiras desejadas: ");
-                        int numFileiras = scanner.nextInt();
-
-                        System.out.print("Digite o número de vagas por fila: ");
-                        int numVagasPorFila = scanner.nextInt();
-
-                        estacionamento = new Estacionamento(nome, numFileiras, numVagasPorFila);
-                    }
-                    break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
                     if (validaEstacionamento()){
@@ -245,4 +231,46 @@ public class App {
             }
         } while (subEscolha != 5);
     }
+
+    static class GerarID {
+        private static int lastID = 0;
+
+        public static int ID() {
+            lastID++;
+            return lastID;
+        }
+    }
+    private static void GerarDados() {
+
+        Random rand = new Random();
+
+        for(int i=0;i<3;i++){
+            String nome = "Estacionamento " + rand.nextInt(100);
+            int fileiras = rand.nextInt(10) + 1; // Mínimo de 1 fileira
+            int vagasPorFila = rand.nextInt(20) + 1; // Mínimo de 1 vaga por fileira
+            Estacionamento n = new Estacionamento(nome, fileiras, vagasPorFila);
+
+            estacionamentosAletorios.add(n);
+        }
+
+        for (Estacionamento x : estacionamentosAletorios) {
+            for(int i=0;i<9;i++){
+
+                String placa =  Integer.toString(GerarID.ID());
+                Veiculo veiculo = new Veiculo(placa);
+
+                String nome = "Cliente " + rand.nextInt(1000);
+                String id = Integer.toString(GerarID.ID());
+                Cliente n = new Cliente(nome, id);
+
+                x.addCliente(n);
+                x.addVeiculo(veiculo, id);
+
+                for (int j = 0; j <2; j++) {
+                    x.estacionar(placa);
+                    x.sair(placa);
+                }
+            }
+        }
+    };
 }
