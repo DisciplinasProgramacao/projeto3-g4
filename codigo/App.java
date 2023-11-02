@@ -42,11 +42,14 @@ public class App {
         scanner.close();
     }
 
-    public static boolean validaEstacionamento(){
-        if(estacionamento == null){
+    public static boolean validaEstacionamento() {
+        if (estacionamento == null) {
             return false;
-        } return true;
-    };
+        }
+        return true;
+    }
+
+    ;
 
     public static void cadastrarSubMenu(Scanner scanner) {
         int subEscolha;
@@ -62,7 +65,7 @@ public class App {
             switch (subEscolha) {
                 case 1:
                     System.out.println("Opção Cadastrar Estacionamento selecionada.");
-                    if (!validaEstacionamento()){
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento já cadastrado.");
                         break;
                     } else {
@@ -80,10 +83,10 @@ public class App {
                     break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
-                    if (!validaEstacionamento()){
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
-                    } else{
+                    } else {
                         scanner.nextLine();
                         System.out.print("Digite o nome do cliente: ");
                         String nome = scanner.nextLine();
@@ -91,11 +94,11 @@ public class App {
                         Cliente cliente = new Cliente(nome, idClientes);
 
                         DAOCliente daoCliente = new DAOCliente("clientes.txt");
-                        try{
+                        try {
                             daoCliente.abrirEscrita();
                             daoCliente.add(cliente);
                             daoCliente.fechar();
-                        }catch(IOException e){
+                        } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
 
@@ -110,10 +113,10 @@ public class App {
                     break;
                 case 3:
                     System.out.println("Opção Cadastrar Veículo selecionada.");
-                    if (!validaEstacionamento()){
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
-                    } else{
+                    } else {
                         scanner.nextLine();
                         System.out.print("Id do cliente: ");
                         String id = scanner.nextLine();
@@ -128,7 +131,7 @@ public class App {
                             daoVeiculo.abrirEscrita();
                             daoVeiculo.add(veiculo);
                             daoVeiculo.fechar();
-                        }catch (IOException e){
+                        } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
                         estacionamento.addVeiculo(veiculo, id);
@@ -158,10 +161,10 @@ public class App {
             switch (subEscolha) {
                 case 1:
                     System.out.println("Opção Estacionar Veículo selecionada.");
-                    if (validaEstacionamento()){
+                    if (validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
-                    } else{
+                    } else {
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
 
@@ -170,10 +173,10 @@ public class App {
                     break;
                 case 2:
                     System.out.println("Opção Sair da Vaga com Veículo selecionada.");
-                    if (validaEstacionamento()){
+                    if (validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
-                    } else{
+                    } else {
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
 
@@ -205,7 +208,7 @@ public class App {
             switch (subEscolha) {
                 case 1:
                     System.out.println("Opção retorno do total arrecadado.");
-                    if (validaEstacionamento()){
+                    if (validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
                     } else {
@@ -216,7 +219,7 @@ public class App {
                     break;
                 case 2:
                     System.out.println("Opção retorno do total arrecadado no mês.");
-                    if (validaEstacionamento()){
+                    if (validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
                     } else {
@@ -231,7 +234,7 @@ public class App {
                     break;
                 case 3:
                     System.out.println("Opção retorno valor médio por uso.");
-                    if (validaEstacionamento()){
+                    if (validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
                     } else {
@@ -242,7 +245,7 @@ public class App {
                     break;
                 case 4:
                     System.out.println("Opção top 5 clientes.");
-                    if (validaEstacionamento()){
+                    if (validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
                         break;
                     } else {
