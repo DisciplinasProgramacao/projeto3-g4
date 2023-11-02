@@ -14,7 +14,7 @@ public class Estacionamento {
 		this.nome = nome;
 		this.quantFileiras = fileiras;
 		this.vagasPorFileira = vagasPorFila;
-
+		gerarVagas();
 	}
 
     public boolean addVeiculo(Veiculo veiculo, String idCli) {
@@ -62,7 +62,6 @@ public class Estacionamento {
     }
 
     public Vaga procuraVaga() {
-        gerarVagas();
         for (Vaga vaga : vagas) {
             if (vaga.disponivel()) {
                 return vaga;
