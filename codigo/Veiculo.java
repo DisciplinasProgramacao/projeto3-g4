@@ -77,6 +77,6 @@ public class Veiculo implements IDataToText {
 
     @Override
     public String dataToText() {
-        return placa;
+        return placa + ";" + totalDeUsos();
     }
 }
