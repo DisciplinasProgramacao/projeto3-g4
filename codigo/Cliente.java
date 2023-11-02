@@ -1,4 +1,4 @@
-public class Cliente {
+public class Cliente implements IDataToText{
 
 	private String nome;
 	private String id;
@@ -70,5 +70,10 @@ public class Cliente {
 
 		return arrecadadoVeiculoMes;	
 		}
+
+	@Override
+	public String dataToText() {
+		return id + nome;
+	}
 
 }
