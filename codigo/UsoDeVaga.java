@@ -27,11 +27,10 @@ public class UsoDeVaga {
 		
 		if (tempoPermanenciaMinutos >= servico.getTempo()) {
 			return valorPago();
-		} else {
-			
-			System.out.println("Tempo de permanência insuficiente para sair.");
-			return 0.0; 
+		}else {
+			return valorPago();
 		}
+		
 	}
 	
 
@@ -41,13 +40,10 @@ public class UsoDeVaga {
 
 	public double valorPago() {
 		int calcTempo = (int) entrada.until(saida, ChronoUnit.MINUTES);
-		double valorTotal = (calcTempo / 15.0) * VALOR_FRACAO + servico.getValor();
-
-		if (valorTotal > VALOR_MAXIMO) {
-			valorPago = VALOR_MAXIMO;
-		} else {
-			valorPago = valorTotal;
-		}
+		int quantidadeFracoesTempo = (int) Math.ceil(calcTempo / 15.0);
+		valorPago = quantidadeFracoesTempo * VALOR_FRACAO;
+		
+		if(valorPago > VALOR_MAXIMO) valorPago = VALOR_MAXIMO;
 
 		return valorPago;
 	}
