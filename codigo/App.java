@@ -61,10 +61,12 @@ public class App {
             switch (subEscolha) {
                 case 1:
                     System.out.println("Opção Cadastrar Estacionamento selecionada.");
-                    if (!validaEstacionamento()){
+                    if (validaEstacionamento()){
                         System.out.println("Estacionamento já cadastrado.");
                         break;
                     } else {
+                        scanner.nextLine();
+
                         System.out.print("Digite o nome do estacionamento: ");
                         String nome = scanner.nextLine();
 
