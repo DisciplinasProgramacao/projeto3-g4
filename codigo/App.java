@@ -1,7 +1,8 @@
+import java.io.IOException;
 import java.util.Scanner;  // Import the Scanner class
 
 public class App {
-    static Estacionamento estacionamento = null;
+    static Estacionamento estacionamento = new Estacionamento("estacionamento", 1, 1);
     static String idClientes = "1";
 
     public static void main(String[] args) {
@@ -79,14 +80,24 @@ public class App {
                     break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
-                    if (validaEstacionamento()){
+                    if (!validaEstacionamento()){
                         System.out.println("Estacionamento não cadastrado.");
                         break;
                     } else{
+                        scanner.nextLine();
                         System.out.print("Digite o nome do cliente: ");
                         String nome = scanner.nextLine();
 
                         Cliente cliente = new Cliente(nome, idClientes);
+
+                        DAOCliente daoCliente = new DAOCliente("clientes.txt");
+                        try{
+                            daoCliente.abrirEscrita();
+                            daoCliente.add(cliente);
+                            daoCliente.fechar();
+                        }catch(IOException e){
+                            System.out.println(e.getMessage());
+                        }
 
                         estacionamento.addCliente(cliente);
 
@@ -99,7 +110,7 @@ public class App {
                     break;
                 case 3:
                     System.out.println("Opção Cadastrar Veículo selecionada.");
-                    if (validaEstacionamento()){
+                    if (!validaEstacionamento()){
                         System.out.println("Estacionamento não cadastrado.");
                         break;
                     } else{
