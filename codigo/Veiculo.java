@@ -4,7 +4,7 @@ import java.util.List;
 /**
  * Classe para guardar atributos e realizar ações referentes ao Veículo
  */
-public class Veiculo {
+public class Veiculo implements IDataToText {
 
     private String placa;
     private List<UsoDeVaga> usos;
@@ -73,5 +73,10 @@ public class Veiculo {
      */
     public int totalDeUsos() {
         return usos.size();
+    }
+
+    @Override
+    public String dataToText() {
+        return placa;
     }
 }
