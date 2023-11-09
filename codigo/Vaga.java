@@ -35,19 +35,6 @@ public class Vaga {
 		return false; 
 	}
 
-	/**
-	 * Método para retirar um carro de uma vaga, ele valida se a vaga está realmente ocupada, e então a esvazia.
-	 * @return Retorna verdadeiro se a vaga foi desocupada, ou falso se a vaga está vazia.
-	 */
-
-	public boolean sair() {
-
-		if (!disponivel) {
-			disponivel = true;
-			return true; 
-		}
-		return false; 
-	}
 
 	/**
 	 * Método para informar se uma vaga está vazia ou não
@@ -58,4 +45,6 @@ public class Vaga {
 
 		return disponivel;
 	}
+
+
 }
