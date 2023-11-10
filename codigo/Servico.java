@@ -2,7 +2,7 @@ public enum Servico {
 
     MANOBRISTA("Manobrista",5.0,0),
     LAVAGEM("Lavagem",20.0,60),
-    POLIMENTO("Polimento",45.0, 120);
+    POLIMENTO("Polimento",45.0, 0);
 
 
     private String nome;

@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.*;
@@ -7,7 +8,8 @@ public class App {
     static List<Estacionamento> estacionamentosAletorios = new ArrayList<>();
     static String idClientes = "1";
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
 
         GerarDados();
@@ -31,7 +33,7 @@ public class App {
                 case 4 -> System.out.println("Saindo do programa.");
                 default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (escolha != 5);
+        } while (escolha != 4);
 
         scanner.close();
     }
@@ -161,7 +163,18 @@ public class App {
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
 
-                        estacionamento.estacionar(placa);
+                        System.out.print("Gostaria de contratar algum serviço adicional(s/n)? ");
+                        String opcao = scanner.nextLine();
+
+                        if (opcao.trim().equalsIgnoreCase("s")) {
+                            System.out.println("Qual serviço você gostaria de contratar(MANOBRISTA/LAVAGEM/POLIMENTO)? ");
+                            String opcaoServico = scanner.nextLine();
+                            Servico servico = Servico.valueOf(opcaoServico.toUpperCase());
+                            System.out.println("Servico de " + servico.getNome() + " contratado!");
+                            estacionamento.estacionar(placa, servico);
+                        }else {
+                            estacionamento.estacionar(placa);
+                        }
                     }
                 }
                 case 2 -> {
@@ -173,7 +186,8 @@ public class App {
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
 
-                        estacionamento.sair(placa);
+                        double valorAPagar = estacionamento.sair(placa);
+                        System.out.println("Valor a ser pago: " + formatarMoeda(valorAPagar));
                     }
                 }
                 case 3 -> System.out.println("Voltando ao menu principal.");

@@ -1,3 +1,4 @@
+import javax.print.attribute.standard.Severity;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -62,6 +63,14 @@ public class Estacionamento {
 
 		if (vaga != null && veiculo != null) {
 			veiculo.estacionar(vaga);
+		}
+	}
+	public void estacionar(String placa, Servico servico) {
+		Veiculo veiculo = procuraVeiculo(placa);
+		Vaga vaga = procuraVaga();
+
+		if (vaga != null && veiculo != null) {
+			veiculo.estacionar(vaga, servico);
 		}
 	}
 	/**

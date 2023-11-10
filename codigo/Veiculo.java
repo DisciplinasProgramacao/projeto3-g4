@@ -7,7 +7,7 @@ import java.util.List;
 public class Veiculo implements IDataToText {
 
     private String placa;
-    private List<UsoDeVaga> usos;
+    private List<UsoDeVaga> usos = new ArrayList<>(50);
 
     /**
      * Construtor para criar um veículo a partir de sua placa
@@ -15,7 +15,6 @@ public class Veiculo implements IDataToText {
      */
     public Veiculo(String placa) {
         this.placa = placa;
-        usos = new ArrayList<>();
     }
 
     /**
@@ -29,6 +28,12 @@ public class Veiculo implements IDataToText {
         }
     }
 
+    public void estacionar(Vaga vaga, Servico servico) {
+        if (vaga.disponivel()) {
+            usos.add(new UsoDeVaga(vaga, servico));
+        }
+    }
+
     /**
      * Chama o metodo de sair da classe UsoDeVaga e retorna o valor pago para esse uso.
      * @return
@@ -36,8 +41,7 @@ public class Veiculo implements IDataToText {
     public double sair() {
         int ultimaPosicao = usos.size() - 1;
         UsoDeVaga uso = usos.get(ultimaPosicao);
-        uso.sair();
-        return uso.valorPago();
+        return uso.sair();
     }
 
     /**
