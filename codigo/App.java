@@ -1,12 +1,16 @@
 import java.io.IOException;
-import java.util.Scanner;  // Import the Scanner class
+import java.text.NumberFormat;
+import java.util.*;
 
 public class App {
     static Estacionamento estacionamento = new Estacionamento("estacionamento", 1, 1);
+    static List<Estacionamento> estacionamentosAletorios = new ArrayList<>();
     static String idClientes = "1";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        GerarDados();
 
         int escolha;
 
@@ -21,21 +25,11 @@ public class App {
             escolha = scanner.nextInt();
 
             switch (escolha) {
-                case 1:
-                    cadastrarSubMenu(scanner);
-                    break;
-                case 2:
-                    operacoesVeiculoSubMenu(scanner);
-                    break;
-                case 3:
-                    operacoesEstacionamentoSubMenu(scanner);
-                    break;
-                case 4:
-                    System.out.println("Saindo do programa.");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
-                    break;
+                case 1 -> cadastrarSubMenu(scanner);
+                case 2 -> operacoesVeiculoSubMenu(scanner);
+                case 3 -> operacoesEstacionamentoSubMenu(scanner);
+                case 4 -> System.out.println("Saindo do programa.");
+                default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
         } while (escolha != 5);
 
@@ -48,8 +42,6 @@ public class App {
         }
         return true;
     }
-
-    ;
 
     public static void cadastrarSubMenu(Scanner scanner) {
         int subEscolha;
@@ -69,6 +61,7 @@ public class App {
                         System.out.println("Estacionamento já cadastrado.");
                         break;
                     } else {
+                        scanner.nextLine();
                         System.out.print("Digite o nome do estacionamento: ");
                         String nome = scanner.nextLine();
 
@@ -104,7 +97,7 @@ public class App {
 
                         estacionamento.addCliente(cliente);
 
-                        System.out.print("Cliente cadastrado, seu id é: " + idClientes);
+                        System.out.print("Cliente cadastrado, seu id é: " + idClientes + "\n");
 
                         var idAtual = Integer.parseInt(idClientes);
                         idAtual++;
@@ -159,38 +152,34 @@ public class App {
             subEscolha = scanner.nextInt();
 
             switch (subEscolha) {
-                case 1:
+                case 1 -> {
                     System.out.println("Opção Estacionar Veículo selecionada.");
-                    if (validaEstacionamento()) {
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
-                        break;
                     } else {
+                        scanner.nextLine();
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
 
                         estacionamento.estacionar(placa);
                     }
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     System.out.println("Opção Sair da Vaga com Veículo selecionada.");
-                    if (validaEstacionamento()) {
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
-                        break;
                     } else {
+                        scanner.nextLine();
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
 
                         estacionamento.sair(placa);
                     }
-                    break;
-                case 3:
-                    System.out.println("Voltando ao menu principal.");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
-                    break;
+                }
+                case 3 -> System.out.println("Voltando ao menu principal.");
+                default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (subEscolha != 6);
+        } while (subEscolha != 3);
     }
 
     public static void operacoesEstacionamentoSubMenu(Scanner scanner) {
@@ -206,49 +195,47 @@ public class App {
             subEscolha = scanner.nextInt();
 
             switch (subEscolha) {
-                case 1:
+                case 1 -> {
                     System.out.println("Opção retorno do total arrecadado.");
-                    if (validaEstacionamento()) {
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
-                        break;
                     } else {
                         double total = estacionamento.totalArrecadado();
 
-                        System.out.println("O total arrecadado pelo estacionamento foi de." + total);
+                        System.out.println("O total arrecadado pelo estacionamento foi de " + formatarMoeda(total));
                     }
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     System.out.println("Opção retorno do total arrecadado no mês.");
-                    if (validaEstacionamento()) {
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
-                        break;
                     } else {
+                        scanner.nextLine();
                         System.out.print("Qual mês você deseja conferir: ");
                         String mes = scanner.nextLine();
 
                         double totalMes = estacionamento.arrecadacaoNoMes(Integer.parseInt(mes));
 
-                        System.out.println("O total arrecadado pelo estacionamento no mês" + mes);
-                        System.out.println("foi de" + totalMes);
+                        System.out.println("O total arrecadado pelo estacionamento no mês " + mes);
+                        System.out.println("foi de: " + formatarMoeda(totalMes));
                     }
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     System.out.println("Opção retorno valor médio por uso.");
-                    if (validaEstacionamento()) {
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
-                        break;
                     } else {
                         double valorMedio = estacionamento.valorMedioPorUso();
 
-                        System.out.println("O total arrecadado pelo estacionamento no mês" + valorMedio);
+                        System.out.println("O total arrecadado pelo estacionamento no mês: " + formatarMoeda(valorMedio));
                     }
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     System.out.println("Opção top 5 clientes.");
-                    if (validaEstacionamento()) {
+                    if (!validaEstacionamento()) {
                         System.out.println("Estacionamento não cadastrado.");
-                        break;
                     } else {
+                        scanner.nextLine();
                         System.out.print("Qual mês você deseja conferir: ");
                         String mes = scanner.nextLine();
 
@@ -256,14 +243,56 @@ public class App {
 
                         System.out.println("Os top 5 clientes são." + clientes);
                     }
-                    break;
-                case 5:
-                    System.out.println("Voltando ao menu principal.");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
-                    break;
+                }
+                case 5 -> System.out.println("Voltando ao menu principal.");
+                default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
         } while (subEscolha != 5);
     }
+
+    static class GerarID {
+        private static int lastID = 0;
+
+        public static int ID() {
+            lastID++;
+            return lastID;
+        }
+    }
+
+    private static void GerarDados() {
+
+        Random rand = new Random();
+
+        for (int i = 0; i < 3; i++) {
+            String nome = "Estacionamento " + rand.nextInt(100);
+            int fileiras = rand.nextInt(10) + 1; // Mínimo de 1 fileira
+            int vagasPorFila = rand.nextInt(20) + 1; // Mínimo de 1 vaga por fileira
+            Estacionamento n = new Estacionamento(nome, fileiras, vagasPorFila);
+
+            estacionamentosAletorios.add(n);
+        }
+        for (Estacionamento x : estacionamentosAletorios) {
+            for (int i = 0; i < 9; i++) {
+
+                String placa = Integer.toString(GerarID.ID());
+                Veiculo veiculo = new Veiculo(placa);
+
+                String nome = "Cliente " + rand.nextInt(1000);
+                String id = Integer.toString(GerarID.ID());
+                Cliente n = new Cliente(nome, id);
+
+                x.addCliente(n);
+                x.addVeiculo(veiculo, id);
+                for (int j = 0; j < 2; j++) {
+                    x.estacionar(placa);
+                    x.sair(placa);
+                }
+            }
+        }
+    }
+
+    public static String formatarMoeda(Double valor) {
+        return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(valor);
+    }
+
 }

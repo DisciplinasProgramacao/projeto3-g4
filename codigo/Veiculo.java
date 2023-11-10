@@ -75,6 +75,14 @@ public class Veiculo implements IDataToText {
         return usos.size();
     }
 
+    public String getPlaca() {
+        return placa;
+    }
+
+    public List<UsoDeVaga> getUsos() {
+        return usos;
+    }
+
     @Override
     public String dataToText() {
         return placa + ";" + totalDeUsos();

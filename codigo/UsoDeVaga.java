@@ -22,6 +22,7 @@ public class UsoDeVaga {
 	}
 
 	public double sair() {
+		contratarServico(Servico.LAVAGEM);
 		this.saida = LocalDateTime.now();
 		int tempoPermanenciaMinutos = (int) entrada.until(saida, ChronoUnit.MINUTES);
 		
@@ -40,6 +41,8 @@ public class UsoDeVaga {
 
 	public double valorPago() {
 		int calcTempo = (int) entrada.until(saida, ChronoUnit.MINUTES);
+		if(calcTempo == 0)
+			calcTempo = 1;
 		int quantidadeFracoesTempo = (int) Math.ceil(calcTempo / 15.0);
 		valorPago = quantidadeFracoesTempo * VALOR_FRACAO;
 		

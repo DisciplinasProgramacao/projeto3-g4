@@ -1,79 +1,178 @@
-public class Cliente implements IDataToText{
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-	private String nome;
-	private String id;
-	private Veiculo[] veiculos;
+public class Cliente implements IDataToText {
 
-	public Cliente(String nome, String id) {
-		this.nome = nome;
+    private String nome;
+    private String id;
+    private Veiculo[] veiculos;
+
+    public Cliente(String nome, String id) {
+        this.nome = nome;
         this.id = id;
         this.veiculos = new Veiculo[10];
-	}
+    }
 
-	public void addVeiculo(Veiculo veiculo) {
-		for (int i = 0; i < veiculos.length; i++) {
-            if (veiculos[i] == null && !veiculos[i].equals(veiculo)) {
-                veiculos[i] = veiculo;
+    /**
+     * Metodo para adicionar/cadastrar um veiculo ao cliente.
+     *
+     * @param veiculo Recebe veiculo como parâmetro para vincular ao cliente.
+     */
+    public void addVeiculo(Veiculo veiculo) {
+        boolean campoLivre = false;
+        int pos = -1;
+        for (int i = 0; i < veiculos.length && !campoLivre; i++) {
+            if (veiculos[i] == null) {
+                campoLivre = true;
+                pos = i;
             }
         }
-	}
+        if (pos != -1)
+            veiculos[pos] = veiculo;
 
-	public Veiculo possuiVeiculo(String placa) {
-		Veiculo buscando = new Veiculo(placa);
-		for (Veiculo v: veiculos){
-			if (v.equals(buscando)){
-				return v;
-			}
-			
-		}
-		return null;
-	}
+    }
 
-	public int totalDeUsos() {
-		int total = 0;
-		for (Veiculo v: veiculos){
-			total += v.totalDeUsos();
-		}
-		return total;
-	}
 
-	public double arrecadadoPorVeiculo(String placa) {
-		Veiculo buscando = new Veiculo(placa);
-		double arrecadado = 0d;
-		for (Veiculo v: veiculos){
-			if (v.equals(buscando)){
-				arrecadado = v.totalArrecadado();
-				break;
-			}
-		}
-		return arrecadado;
-	
-	}
+    /**
+     * Metodo para verificar se o cliente possui um determiando veículo.
+     *
+     * @param placa Recebe placa como parâmetro para procurar, com o metodo equals, na lista de veiculos para ver se ele pertence ao cliente.
+     * @return retorna o veículo se o cliente possuir o carro, caso contrário retorna null.
+     */
+    public Veiculo possuiVeiculo(String placa) {
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo != null) {
+                if (veiculo.getPlaca().equals(placa)) {
+                    return veiculo;
+                }
+            }
+        }
+        return null;
+    }
 
-	public double arrecadadoTotal() {
-		Veiculo buscando = new Veiculo("asdfg4");
-		double totalArrecadado = 0d;
 
-		for (Veiculo v: veiculos){
-			totalArrecadado += v.totalArrecadado();
-		}
+    /**
+     * Metodo para verificar o tatal de usos do cliente no estacionamento.
+     *
+     * @return retorna o total de usos de todos os veiculos do cliente.
+     */
+    public int totalDeUsos() {
+        int total = 0;
+        for (Veiculo v : veiculos) {
+            if( v != null)
+               total += v.totalDeUsos();
+        }
+        return total;
+    }
 
-		return totalArrecadado;
-	}
+    /**
+     * Metodo para calcular o total arrecadado pelo veiculo do cliente, cujo a placa será dada como parametro.
+     *
+     * @param placa recebe a placa como parametro para decidir qual veiculo sera pesquisado do cliente.
+     * @return retorna o total arrecadado por veiculo (pesquisado pela placa) do cliente.
+     */
+    public double arrecadadoPorVeiculo(String placa) {
+        Veiculo buscando = new Veiculo(placa);
+        double arrecadado = 0d;
+        for (Veiculo v : veiculos) {
+            if (v.equals(buscando)) {
+                arrecadado = v.totalArrecadado();
+                break;
+            }
+        }
+        return arrecadado;
+    }
 
-	public double arrecadadoNoMes(int mes) {
-		double arrecadadoVeiculoMes = 0d;
+    /**
+     * Metodo para calcular o total arrecadado por todos os veiculos de um cliente.
+     *
+     * @return retorna o total arrecadado pelo cliente, de todos os veiculos.
+     */
+    public double arrecadadoTotal() {
+        double totalArrecadado = 0d;
 
-		for (Veiculo v: veiculos){
-				arrecadadoVeiculoMes += v.arrecadadoNoMes(mes);
-			}
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo != null)
+                totalArrecadado += veiculo.totalArrecadado();
+        }
 
-		return arrecadadoVeiculoMes;	
-		}
+        return totalArrecadado;
+    }
 
-	@Override
-	public String dataToText() {
-		return id + nome;
-	}
+
+    /**
+     * Metodo para calcular o total arrecadado no mes pelo cliente.
+     *
+     * @param mes recebe o mes desejado como parametro.
+     * @return retorna o total arrecadado pela data do cliente.
+     */
+    public double arrecadadoNoMes(int mes) {
+        double arrecadadoVeiculoMes = 0d;
+
+        for (Veiculo v : veiculos) {
+            if (v != null)
+                arrecadadoVeiculoMes += v.arrecadadoNoMes(mes);
+        }
+
+        return arrecadadoVeiculoMes;
+    }
+
+    /**
+     * Metodo retornar o historico (todos os dados) do cliente pelo mes.
+     *
+     * @param mes   recebe o mes desejado como parametro.
+     * @param placa recebe a placa para pesquisar qual veiculo do cliente sera referido o relatorio.
+     * @return retorna um string builder com o relatorio do cliente.
+     */
+    public String pesquisarHistorico(int mes, String placa) {
+        StringBuilder relatorio = new StringBuilder();
+
+        Veiculo buscando = possuiVeiculo(placa);
+
+        if (buscando != null) {
+            List<UsoDeVaga> usos = buscando.getUsos();
+            for (UsoDeVaga uso : usos) {
+                if (uso.ehDoMes(mes)) {
+                    relatorio.append("Placa: ").append(placa).append("\n");
+                    relatorio.append("Data: ").append(mes).append("\n");
+                    relatorio.append("Valor Pago: ").append(uso.valorPago()).append("\n");
+                    relatorio.append("--------------").append("\n");
+                }
+            }
+            relatorio.append("Total de Uso: ").append(totalDeUsos()).append("\n");
+            relatorio.append("Arrecadado pelo veiculo: ").append(placa).append(" ").append(arrecadadoPorVeiculo(placa)).append("\n");
+            relatorio.append("Arrecadado Total: ").append(arrecadadoTotal()).append("\n");
+        }
+
+        return relatorio.toString();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Cliente cliente = (Cliente) object;
+        return Objects.equals(id, cliente.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + " - Id: " + id;
+    }
+
+    @Override
+    public String dataToText() {
+        return id + ";" + nome;
+    }
 
 }

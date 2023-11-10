@@ -95,7 +95,9 @@ public class Estacionamento {
 	 */
 	public double sair(String placa) {
 		Veiculo veiculo = procuraVeiculo(placa);
-		return veiculo.sair();
+		if(veiculo != null)
+			return veiculo.sair();
+		return 0d;
 	}
 	/**
 	 * Esse método tem como objetivo ver o total arrecado pelo estacionamento;
