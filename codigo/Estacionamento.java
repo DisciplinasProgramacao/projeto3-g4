@@ -20,12 +20,11 @@ public class Estacionamento {
 	/**
 	 * Cadastra um veículo à um cliente previamente cadastrado no sitema do estacionamento;
 	 * @param veiculo veículo a ser adicionado;
-	 * @param idCli string que identifica o cliente;
+	 * @param cliente string que identifica o cliente;
 	 */
-	public void addVeiculo(Veiculo veiculo, String idCli) {
-		Cliente buscando = new Cliente("Ramon", idCli);
+	public void addVeiculo(Veiculo veiculo, Cliente cliente) {
 		for (Cliente x : clientes) {
-			if (x.equals(buscando))
+			if (x.equals(cliente))
 				x.addVeiculo(veiculo);
 		}
 	}
@@ -93,7 +92,8 @@ public class Estacionamento {
 	private Veiculo procuraVeiculo(String placa) {
 		for (Cliente cliente : clientes) {
 			Veiculo veiculo = cliente.possuiVeiculo(placa);
-			return veiculo;
+			if(veiculo!= null)
+				return veiculo;
 		}
 		return null;
 	}

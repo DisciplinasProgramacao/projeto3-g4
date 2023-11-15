@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
 public class Veiculo implements IDataToText {
 
     private String placa;
-    private List<UsoDeVaga> usos = new ArrayList<>(50);
+    private List<UsoDeVaga> usos;
 
     /**
      * Construtor para criar um veículo a partir de sua placa
@@ -15,6 +16,7 @@ public class Veiculo implements IDataToText {
      */
     public Veiculo(String placa) {
         this.placa = placa;
+        usos = new LinkedList<>();
     }
 
     /**
@@ -89,6 +91,6 @@ public class Veiculo implements IDataToText {
 
     @Override
     public String dataToText() {
-        return placa + ";" + totalDeUsos();
+        return placa + ";" + totalDeUsos() + ";";
     }
 }
