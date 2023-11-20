@@ -3,18 +3,20 @@ import java.time.LocalDateTime;
 public class UsoTurno extends UsoDeVaga {
 
     private Turno turno;
+    private Horista horista;
 
-    public UsoTurno(Vaga vaga, Turno turno) {
+    public UsoTurno(Vaga vaga, Turno turno, Horista horista) {
         super(vaga);
         this.turno = turno;
+        this.horista = horista;
     }
 
     @Override
     public double valorPago() {
         if (ehDoTurno()) {
-            return 0; // Não paga pelo estacionamento no turno escolhido
+            return 0; 
         } else {
-            return calcularValorHorista();
+            return horista.calcularValor(); 
         }
     }
 
@@ -23,9 +25,5 @@ public class UsoTurno extends UsoDeVaga {
         LocalDateTime now = LocalDateTime.now();
         int hora = now.getHour();
         return turno.dentroDoTurno(hora);
-    }
-
-    private double calcularValorHorista() {
-        // Implemente a lógica para calcular o valor quando o cliente de turno usar fora do seu turno
     }
 }
