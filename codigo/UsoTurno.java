@@ -16,7 +16,7 @@ public class UsoTurno extends UsoDeVaga {
         if (ehDoTurno()) {
             return 0; 
         } else {
-            return horista.calcularValor(); 
+            return horista.valorPago(); 
         }
     }
 
