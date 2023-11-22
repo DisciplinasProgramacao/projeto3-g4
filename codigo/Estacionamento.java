@@ -1,13 +1,15 @@
-import javax.print.attribute.standard.Severity;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Estacionamento {
 
 	private String nome;
-	private List<Cliente> clientes = new ArrayList<>();
-	private List<Vaga> vagas = new ArrayList<>();
+	private Map<String, Cliente> clientes = new HashMap<>(50);
+	private PriorityQueue<Vaga> vagas = new PriorityQueue<>((Comparator.comparing(Vaga::disponivel).reversed()));
 	private int quantFileiras;
 	private int vagasPorFileira;
 
@@ -20,21 +22,18 @@ public class Estacionamento {
 	/**
 	 * Cadastra um veículo à um cliente previamente cadastrado no sitema do estacionamento;
 	 * @param veiculo veículo a ser adicionado;
-	 * @param idCli string que identifica o cliente;
+	 * @param cliente string que identifica o cliente;
 	 */
-	public void addVeiculo(Veiculo veiculo, String idCli) {
-		Cliente buscando = new Cliente("Ramon", idCli);
-		for (Cliente x : clientes) {
-			if (x.equals(buscando))
-				x.addVeiculo(veiculo);
-		}
+	public void addVeiculo(Veiculo veiculo, Cliente cliente) {
+		Cliente c = clientes.get(cliente.getId());
+		c.addVeiculo(veiculo);
 	}
 	/**
 	 * Cadastra um cliente novo no estacionamento;
 	 * @param cliente cliente novo a ser cadastrado.
 	 */
 	public void addCliente(Cliente cliente) {
-		clientes.add(cliente);
+		clientes.put(cliente.getId(), cliente);
 
 	}
 	/**
@@ -42,14 +41,10 @@ public class Estacionamento {
 	 * automaticamente vagas com seus respectivos identificadores. Ex.: "A1";
 	 */
 	private void gerarVagas() {
-		
 		for (int i = 0; i < quantFileiras; i++) {
 			for (int j = 1; j <= vagasPorFileira; j++) {
-
-				
-				Vaga x = new Vaga(i,j);
+				Vaga x = new Vaga(i, j);
 				vagas.add(x);
-
 			}
 		}
 	}
@@ -78,24 +73,20 @@ public class Estacionamento {
 	 * @return a vaga caso ela esteja disponível, caso não tenha nenhuma vaga disponível retorna null
 	 */
 	private Vaga procuraVaga() {
-		for (Vaga vaga : vagas) {
-			if (vaga.disponivel()) {
-				return vaga;
-			}
-		}
-		return null;
+		return vagas.peek();
 	}
 	/**
 	 * Esse método tem como objetivo verificar se o veículo em questão já está cadastrado no cliente
 	 * @param placa String da placa do veículo a ser verificado
-	 * @return  retorna o veículo se o cliente já possuir o veículo cadastrado em questão, caso contrario retorna null.
+	 * @return retorna o veículo se o cliente já possuir o veículo cadastrado em questão, caso contrario retorna null.
 	 */
 	private Veiculo procuraVeiculo(String placa) {
-		for (Cliente cliente : clientes) {
-			Veiculo veiculo = cliente.possuiVeiculo(placa);
-			return veiculo;
-		}
-		return null;
+		return clientes.values()
+				.stream()
+				.map(cliente -> cliente.possuiVeiculo(placa))
+				.filter(veiculo -> veiculo != null)
+				.findFirst()
+				.orElse(null);
 	}
 	/**
 	 * Esse método tem como objetivo pegar um veículo que esta estacionado retirá-lo da vaga e mostrar o tanto a ser cobrado;
@@ -104,7 +95,7 @@ public class Estacionamento {
 	 */
 	public double sair(String placa) {
 		Veiculo veiculo = procuraVeiculo(placa);
-		if(veiculo != null)
+		if (veiculo != null)
 			return veiculo.sair();
 		return 0d;
 	}
@@ -113,13 +104,9 @@ public class Estacionamento {
 	 * @return valor do total arrecadado pelo estacionamento;
 	 */
 	public double totalArrecadado() {
-		double total = 0;
-		for (Cliente cliente : clientes) {
-			if (cliente != null) {
-				total += cliente.arrecadadoTotal();
-			}
-		}
-		return total;
+		return clientes.values().stream()
+				.mapToDouble(Cliente::arrecadadoTotal)
+				.sum();
 	}
 	/**
 	 * Esse método recebe um mês como parametro para ser analisado e calcula o total de arrecadação no respectivo mês.
@@ -128,33 +115,26 @@ public class Estacionamento {
 	 */
 
 	public double arrecadacaoNoMes(int mes) {
-		double totalMes = 0;
-		for (Cliente cliente : clientes) {
-			if (cliente != null) {
-				totalMes += cliente.arrecadadoNoMes(mes);
-			}
-		}
-		return totalMes;
+		return clientes.values().stream()
+				.mapToDouble(c -> c.arrecadadoNoMes(mes))
+				.sum();
 	}
 	/**
-	 * Esse método tem como objetivo pegar o total de usos dos clientes do estacionamente e o total de arrecadação dos clientes e 
+	 * Esse método tem como objetivo pegar o total de usos dos clientes do estacionamente e o total de arrecadação dos clientes e
 	 * retornar o valor medio por uso.
 	 * @return o valor medio por uso no estacionamento
 	 */
 	public double valorMedioPorUso() {
-
-		double usos = 0;
-		double valorArrecadado = 0;
-
-		for (Cliente x : clientes) {
-			usos += x.totalDeUsos();
-			valorArrecadado += x.arrecadadoTotal();
-		}
-		double media = valorArrecadado / usos;
-		return media;
+		double sum = clientes.values().stream()
+				.mapToDouble(Cliente::arrecadadoTotal)
+				.sum();
+		double usos = clientes.values().stream()
+				.mapToInt(Cliente::totalDeUsos)
+				.sum();
+		return sum / usos;
 	}
 	/**
-	 * Esse método recebe um mes como parametro e verifica quais clientes da Lista clientes utilizou o estacionamento no mes em 
+	 * Esse método recebe um mes como parametro e verifica quais clientes da Lista clientes utilizou o estacionamento no mes em
 	 * questão, cria uma nova lista organizada de maneira decrescete levando em consideração a arrecadação dos clientes no mes.
 	 * @param mes , mes de interesse a ser analisado
 	 * @return retorna uma string com os 5 clientes que mais gastaram no estacionamento
@@ -163,20 +143,19 @@ public class Estacionamento {
 	public String top5Clientes(int mes) {
 		List<Cliente> clienteDoMes = new ArrayList<>();
 
-		for (Cliente x : clientes) {
+		for (Cliente x : clientes.values()) {
 			if (x.arrecadadoNoMes(mes) > 0) {
 				clienteDoMes.add(x);
 			}
 		}
 		clienteDoMes.sort(new Comparator<Cliente>() {
-			public int compare(Cliente cliente1, Cliente cliente2) {	
+			public int compare(Cliente cliente1, Cliente cliente2) {
 				double arrecadacao1 = cliente1.arrecadadoNoMes(mes);
 				double arrecadacao2 = cliente2.arrecadadoNoMes(mes);
-				
+
 				return Double.compare(arrecadacao2, arrecadacao1);
 			}
 		});
-
 		int maxClientes = Math.min(5, clienteDoMes.size());
 
 		StringBuilder top5 = new StringBuilder();
@@ -187,9 +166,6 @@ public class Estacionamento {
 			Cliente cliente = clienteDoMes.get(i);
 			top5.append(cliente + "\n");
 		}
-
 		return top5.toString();
-
 	}
-
 }

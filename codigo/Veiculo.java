@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
 public class Veiculo implements IDataToText {
 
     private String placa;
-    private List<UsoDeVaga> usos = new ArrayList<>(50);
+    private List<UsoDeVaga> usos;
 
     /**
      * Construtor para criar um veículo a partir de sua placa
@@ -15,6 +16,7 @@ public class Veiculo implements IDataToText {
      */
     public Veiculo(String placa) {
         this.placa = placa;
+        usos = new LinkedList<>();
     }
 
     /**
@@ -24,12 +26,14 @@ public class Veiculo implements IDataToText {
      */
     public void estacionar(Vaga vaga) {
         if (vaga.disponivel()) {
+            vaga.setDisponivel(false);
             usos.add(new UsoDeVaga(vaga));
         }
     }
 
     public void estacionar(Vaga vaga, Servico servico) {
         if (vaga.disponivel()) {
+            vaga.setDisponivel(false);
             usos.add(new UsoDeVaga(vaga, servico));
         }
     }
@@ -49,11 +53,9 @@ public class Veiculo implements IDataToText {
      * @return totalArrecadado nos usos
      */
     public double totalArrecadado() {
-        double totalPago = 0;
-        for (UsoDeVaga uso : usos) {
-            totalPago += uso.valorPago();
-        }
-        return totalPago;
+        return usos.stream()
+                .mapToDouble(UsoDeVaga::valorPago)
+                .sum();
     }
 
     /**
@@ -62,13 +64,10 @@ public class Veiculo implements IDataToText {
      * @return totalArrecadado no mes
      */
     public double arrecadadoNoMes(int mes) {
-        double arrecadacao = 0d;
-        for (UsoDeVaga uso : usos) {
-            if (uso.ehDoMes(mes)) {
-                arrecadacao += uso.valorPago();
-            }
-        }
-        return arrecadacao;
+        return usos.stream()
+                .filter(u -> u.ehDoMes(mes))
+                .mapToDouble(UsoDeVaga::valorPago)
+                .sum();
     }
 
     /**
@@ -89,6 +88,6 @@ public class Veiculo implements IDataToText {
 
     @Override
     public String dataToText() {
-        return placa + ";" + totalDeUsos();
+        return placa + ";" + totalDeUsos() + ";";
     }
 }
