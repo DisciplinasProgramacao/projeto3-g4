@@ -28,6 +28,7 @@ public class UsoDeVaga {
     }
 
     public double sair() {
+        vaga.setDisponivel(true);
         this.saida = LocalDateTime.now();
         int tempoPermanenciaMinutos = (int) entrada.until(saida, ChronoUnit.MINUTES);
         if (servico != null) {

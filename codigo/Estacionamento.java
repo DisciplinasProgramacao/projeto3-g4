@@ -1,15 +1,14 @@
-import javax.print.attribute.standard.Severity;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Estacionamento {
 
 	private String nome;
 	private Map<String, Cliente> clientes = new HashMap<>(50);
-	private List<Vaga> vagas = new ArrayList<>();
+	private PriorityQueue<Vaga> vagas = new PriorityQueue<>((Comparator.comparing(Vaga::disponivel).reversed()));
 	private int quantFileiras;
 	private int vagasPorFileira;
 
@@ -19,10 +18,8 @@ public class Estacionamento {
 		this.vagasPorFileira = vagasPorFila;
 		gerarVagas();
 	}
-
 	/**
 	 * Cadastra um veículo à um cliente previamente cadastrado no sitema do estacionamento;
-	 *
 	 * @param veiculo veículo a ser adicionado;
 	 * @param cliente string que identifica o cliente;
 	 */
@@ -30,17 +27,14 @@ public class Estacionamento {
 		Cliente c = clientes.get(cliente.getId());
 		c.addVeiculo(veiculo);
 	}
-
 	/**
 	 * Cadastra um cliente novo no estacionamento;
-	 *
 	 * @param cliente cliente novo a ser cadastrado.
 	 */
 	public void addCliente(Cliente cliente) {
 		clientes.put(cliente.getId(), cliente);
 
 	}
-
 	/**
 	 * Método que utiliza do número de fileiras e da quantidade de vagas por fileira para criar
 	 * automaticamente vagas com seus respectivos identificadores. Ex.: "A1";
@@ -53,10 +47,8 @@ public class Estacionamento {
 			}
 		}
 	}
-
 	/**
 	 * Esse método recebe um veiculo que deseja estecionar e caso tenha vagas disponíveis estaciona o veiculo na vaga em questão;
-	 *
 	 * @param placa String da placa do veículo que deseja estacionar em questão;
 	 */
 	public void estacionar(String placa) {
@@ -67,7 +59,6 @@ public class Estacionamento {
 			veiculo.estacionar(vaga);
 		}
 	}
-
 	public void estacionar(String placa, Servico servico) {
 		Veiculo veiculo = procuraVeiculo(placa);
 		Vaga vaga = procuraVaga();
@@ -76,24 +67,15 @@ public class Estacionamento {
 			veiculo.estacionar(vaga, servico);
 		}
 	}
-
 	/**
 	 * Esse método procura alguma vaga disponível no estacionamento.
-	 *
 	 * @return a vaga caso ela esteja disponível, caso não tenha nenhuma vaga disponível retorna null
 	 */
 	private Vaga procuraVaga() {
-		for (Vaga vaga : vagas) {
-			if (vaga.disponivel()) {
-				return vaga;
-			}
-		}
-		return null;
+		return vagas.peek();
 	}
-
 	/**
 	 * Esse método tem como objetivo verificar se o veículo em questão já está cadastrado no cliente
-	 *
 	 * @param placa String da placa do veículo a ser verificado
 	 * @return retorna o veículo se o cliente já possuir o veículo cadastrado em questão, caso contrario retorna null.
 	 */
@@ -105,10 +87,8 @@ public class Estacionamento {
 				.findFirst()
 				.orElse(null);
 	}
-
 	/**
 	 * Esse método tem como objetivo pegar um veículo que esta estacionado retirá-lo da vaga e mostrar o tanto a ser cobrado;
-	 *
 	 * @param placa string da placa do veiculo que está saindo da vaga;
 	 * @return tira o veiculo do estacionamento e retorna o valor a ser pago;
 	 */
@@ -118,10 +98,8 @@ public class Estacionamento {
 			return veiculo.sair();
 		return 0d;
 	}
-
 	/**
 	 * Esse método tem como objetivo ver o total arrecado pelo estacionamento;
-	 *
 	 * @return valor do total arrecadado pelo estacionamento;
 	 */
 	public double totalArrecadado() {
@@ -129,10 +107,8 @@ public class Estacionamento {
 				.mapToDouble(Cliente::arrecadadoTotal)
 				.sum();
 	}
-
 	/**
 	 * Esse método recebe um mês como parametro para ser analisado e calcula o total de arrecadação no respectivo mês.
-	 *
 	 * @param mes , mes em questão a ser analisado;
 	 * @return total arrecadado no mês de interesse;
 	 */
@@ -142,11 +118,9 @@ public class Estacionamento {
 				.mapToDouble(c -> c.arrecadadoNoMes(mes))
 				.sum();
 	}
-
 	/**
 	 * Esse método tem como objetivo pegar o total de usos dos clientes do estacionamente e o total de arrecadação dos clientes e
 	 * retornar o valor medio por uso.
-	 *
 	 * @return o valor medio por uso no estacionamento
 	 */
 	public double valorMedioPorUso() {
@@ -158,11 +132,9 @@ public class Estacionamento {
 				.sum();
 		return sum / usos;
 	}
-
 	/**
 	 * Esse método recebe um mes como parametro e verifica quais clientes da Lista clientes utilizou o estacionamento no mes em
 	 * questão, cria uma nova lista organizada de maneira decrescete levando em consideração a arrecadação dos clientes no mes.
-	 *
 	 * @param mes , mes de interesse a ser analisado
 	 * @return retorna uma string com os 5 clientes que mais gastaram no estacionamento
 	 */
