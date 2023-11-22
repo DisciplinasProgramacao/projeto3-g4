@@ -73,7 +73,6 @@ public class App {
     public static int usoMensalistasMes(String mes){
         // método no estacionamento pegando o método totalDeUsos dos clientes mensalistas
 
-
         return 0;
     };
 
