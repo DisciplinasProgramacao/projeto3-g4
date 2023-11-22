@@ -1,10 +1,10 @@
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class Horista extends UsoDeVaga{
+public class UsoHorista extends UsoDeVaga{
 
 
-    public  Horista(Vaga vaga, Servico servico) {
+    public  UsoHorista(Vaga vaga, Servico servico) {
         super(vaga, servico);
         this.vaga = vaga;
         this.entrada = LocalDateTime.now();
