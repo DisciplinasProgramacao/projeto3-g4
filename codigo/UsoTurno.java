@@ -3,12 +3,11 @@ import java.time.LocalDateTime;
 public class UsoTurno extends UsoDeVaga {
 
     private Turno turno;
-    private Horista horista;
+    private UsoHorista horista;
 
-    public UsoTurno(Vaga vaga, Turno turno, Horista horista) {
+    public UsoTurno(Vaga vaga, Turno turno) {
         super(vaga);
         this.turno = turno;
-        this.horista = horista;
     }
 
     @Override
