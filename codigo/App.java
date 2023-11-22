@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -309,6 +310,14 @@ public class App {
     }
 
     private static void lerDadosArquivoClientes() throws FileNotFoundException {
+        File file = new File("clientes.txt");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Nao foi possivel criar o arquivo. " + e.getMessage());
+            }
+        }
         Scanner fileReader = new Scanner(new FileReader("clientes.txt"));
         while(fileReader.hasNext()){
             String[] fields = fileReader.nextLine().split(";");
@@ -322,6 +331,14 @@ public class App {
     }
 
     private static void lerDadosArquivoVeiculos(Scanner scanner) throws FileNotFoundException {
+        File file = new File("veiculos.txt");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Nao foi possivel criar o arquivo. " + e.getMessage());
+            }
+        }
         Scanner fileReader = new Scanner(new FileReader("veiculos.txt"));
         while(fileReader.hasNext()){
             String[] fields = fileReader.nextLine().split(";");
