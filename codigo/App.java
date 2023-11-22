@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.*;
@@ -6,12 +8,17 @@ import java.util.*;
 public class App {
     static Estacionamento estacionamento = new Estacionamento("estacionamento", 1, 1);
     static List<Estacionamento> estacionamentosAletorios = new ArrayList<>();
-    static String idClientes = "1";
+    static Long idClientes = 1l;
+
+    private static Map<String, Cliente> mapClientes = new HashMap<>();
+    private static Map<String, Veiculo> mapVeiculos = new HashMap<>();
 
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
 
+        lerDadosArquivoClientes();
+        lerDadosArquivoVeiculos(scanner);
         GerarDados();
 
         int escolha;
@@ -37,7 +44,6 @@ public class App {
 
         scanner.close();
     }
-
     public static boolean validaEstacionamento() {
         if (estacionamento == null) {
             return false;
@@ -86,7 +92,7 @@ public class App {
                         System.out.print("Digite o nome do cliente: ");
                         String nome = scanner.nextLine();
 
-                        Cliente cliente = new Cliente(nome, idClientes);
+                        Cliente cliente = new Cliente(nome, String.valueOf(idClientes));
 
                         DAOCliente daoCliente = new DAOCliente("clientes.txt");
                         try {
@@ -98,12 +104,11 @@ public class App {
                         }
 
                         estacionamento.addCliente(cliente);
+                        mapClientes.put(String.valueOf(idClientes), cliente);
 
                         System.out.print("Cliente cadastrado, seu id é: " + idClientes + "\n");
 
-                        var idAtual = Integer.parseInt(idClientes);
-                        idAtual++;
-                        idClientes = String.valueOf(idAtual);
+                        idClientes++;
                     }
                     break;
                 case 3:
@@ -129,7 +134,8 @@ public class App {
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
-                        estacionamento.addVeiculo(veiculo, id);
+                        Cliente cliente = mapClientes.get(id);
+                        estacionamento.addVeiculo(veiculo, cliente);
                     }
                     break;
                 case 4:
@@ -241,7 +247,7 @@ public class App {
                     } else {
                         double valorMedio = estacionamento.valorMedioPorUso();
 
-                        System.out.println("O total arrecadado pelo estacionamento no mês: " + formatarMoeda(valorMedio));
+                        System.out.println("O valor medio por uso foi de: " + formatarMoeda(valorMedio));
                     }
                 }
                 case 4 -> {
@@ -296,7 +302,7 @@ public class App {
                 Cliente n = new Cliente(nome, id);
 
                 x.addCliente(n);
-                x.addVeiculo(veiculo, id);
+                x.addVeiculo(veiculo, n);
                 for (int j = 0; j < 2; j++) {
                     x.estacionar(placa);
                     x.sair(placa);
@@ -305,6 +311,50 @@ public class App {
         }
     }
 
+    private static void lerDadosArquivoClientes() throws FileNotFoundException {
+        File file = new File("clientes.txt");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Nao foi possivel criar o arquivo. " + e.getMessage());
+            }
+        }
+        Scanner fileReader = new Scanner(new FileReader("clientes.txt"));
+        while(fileReader.hasNext()){
+            String[] fields = fileReader.nextLine().split(";");
+            String id = fields[0];
+            String nome = fields[1];
+            Cliente cliente = new Cliente(nome, id);
+            mapClientes.put(id, cliente);
+            estacionamento.addCliente(cliente);
+            idClientes++;
+        }
+    }
+
+    private static void lerDadosArquivoVeiculos(Scanner scanner) throws FileNotFoundException {
+        File file = new File("veiculos.txt");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Nao foi possivel criar o arquivo. " + e.getMessage());
+            }
+        }
+        Scanner fileReader = new Scanner(new FileReader("veiculos.txt"));
+        while(fileReader.hasNext()){
+            String[] fields = fileReader.nextLine().split(";");
+            String placa = fields[0];
+            String totalDeUsos = fields[1];
+            Veiculo veiculo = new Veiculo(placa);
+            mapVeiculos.put(placa, veiculo);
+            System.out.println("LENDO DADOS DO ARQUIVO VEICULOS");
+            System.out.print("Qual o id do dono do veiculo de placa: '" + placa + "'? ");
+            String idCliente = scanner.nextLine();
+            Cliente cliente = mapClientes.get(idCliente);
+            estacionamento.addVeiculo(veiculo, cliente);
+        }
+    }
     public static String formatarMoeda(Double valor) {
         return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(valor);
     }

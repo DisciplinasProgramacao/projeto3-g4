@@ -1,17 +1,19 @@
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Cliente implements IDataToText {
 
     private String nome;
     private String id;
-    private Veiculo[] veiculos;
+    private Map<String, Veiculo> veiculos;
 
     public Cliente(String nome, String id) {
         this.nome = nome;
         this.id = id;
-        this.veiculos = new Veiculo[10];
+        this.veiculos = new HashMap<>(10);
     }
 
     /**
@@ -20,17 +22,7 @@ public class Cliente implements IDataToText {
      * @param veiculo Recebe veiculo como parâmetro para vincular ao cliente.
      */
     public void addVeiculo(Veiculo veiculo) {
-        boolean campoLivre = false;
-        int pos = -1;
-        for (int i = 0; i < veiculos.length && !campoLivre; i++) {
-            if (veiculos[i] == null) {
-                campoLivre = true;
-                pos = i;
-            }
-        }
-        if (pos != -1)
-            veiculos[pos] = veiculo;
-
+        veiculos.put(veiculo.getPlaca(), veiculo);
     }
 
 
@@ -41,14 +33,7 @@ public class Cliente implements IDataToText {
      * @return retorna o veículo se o cliente possuir o carro, caso contrário retorna null.
      */
     public Veiculo possuiVeiculo(String placa) {
-        for (Veiculo veiculo : veiculos) {
-            if (veiculo != null) {
-                if (veiculo.getPlaca().equals(placa)) {
-                    return veiculo;
-                }
-            }
-        }
-        return null;
+        return veiculos.get(placa);
     }
 
 
@@ -58,12 +43,9 @@ public class Cliente implements IDataToText {
      * @return retorna o total de usos de todos os veiculos do cliente.
      */
     public int totalDeUsos() {
-        int total = 0;
-        for (Veiculo v : veiculos) {
-            if( v != null)
-               total += v.totalDeUsos();
-        }
-        return total;
+        return veiculos.values().stream()
+                .mapToInt(Veiculo::totalDeUsos)
+                .sum();
     }
 
     /**
@@ -73,15 +55,8 @@ public class Cliente implements IDataToText {
      * @return retorna o total arrecadado por veiculo (pesquisado pela placa) do cliente.
      */
     public double arrecadadoPorVeiculo(String placa) {
-        Veiculo buscando = new Veiculo(placa);
-        double arrecadado = 0d;
-        for (Veiculo v : veiculos) {
-            if (v.equals(buscando)) {
-                arrecadado = v.totalArrecadado();
-                break;
-            }
-        }
-        return arrecadado;
+        Veiculo veiculo = veiculos.get(placa);
+        return veiculo.totalArrecadado();
     }
 
     /**
@@ -90,14 +65,9 @@ public class Cliente implements IDataToText {
      * @return retorna o total arrecadado pelo cliente, de todos os veiculos.
      */
     public double arrecadadoTotal() {
-        double totalArrecadado = 0d;
-
-        for (Veiculo veiculo : veiculos) {
-            if (veiculo != null)
-                totalArrecadado += veiculo.totalArrecadado();
-        }
-
-        return totalArrecadado;
+        return veiculos.values().stream()
+                .mapToDouble(Veiculo::totalArrecadado)
+                .sum();
     }
 
 
@@ -108,14 +78,9 @@ public class Cliente implements IDataToText {
      * @return retorna o total arrecadado pela data do cliente.
      */
     public double arrecadadoNoMes(int mes) {
-        double arrecadadoVeiculoMes = 0d;
-
-        for (Veiculo v : veiculos) {
-            if (v != null)
-                arrecadadoVeiculoMes += v.arrecadadoNoMes(mes);
-        }
-
-        return arrecadadoVeiculoMes;
+        return veiculos.values().stream()
+                .mapToDouble(v -> v.arrecadadoNoMes(mes))
+                .sum();
     }
 
     /**
@@ -128,7 +93,7 @@ public class Cliente implements IDataToText {
     public String pesquisarHistorico(int mes, String placa) {
         StringBuilder relatorio = new StringBuilder();
 
-        Veiculo buscando = possuiVeiculo(placa);
+        Veiculo buscando = veiculos.get(placa);
 
         if (buscando != null) {
             List<UsoDeVaga> usos = buscando.getUsos();
@@ -172,7 +137,6 @@ public class Cliente implements IDataToText {
 
     @Override
     public String dataToText() {
-        return id + ";" + nome;
+        return id + ";" + nome + ";";
     }
-
 }
