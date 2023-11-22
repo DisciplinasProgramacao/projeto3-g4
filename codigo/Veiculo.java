@@ -51,11 +51,9 @@ public class Veiculo implements IDataToText {
      * @return totalArrecadado nos usos
      */
     public double totalArrecadado() {
-        double totalPago = 0;
-        for (UsoDeVaga uso : usos) {
-            totalPago += uso.valorPago();
-        }
-        return totalPago;
+        return usos.stream()
+                .mapToDouble(UsoDeVaga::valorPago)
+                .sum();
     }
 
     /**
@@ -64,13 +62,10 @@ public class Veiculo implements IDataToText {
      * @return totalArrecadado no mes
      */
     public double arrecadadoNoMes(int mes) {
-        double arrecadacao = 0d;
-        for (UsoDeVaga uso : usos) {
-            if (uso.ehDoMes(mes)) {
-                arrecadacao += uso.valorPago();
-            }
-        }
-        return arrecadacao;
+        return usos.stream()
+                .filter(u -> u.ehDoMes(mes))
+                .mapToDouble(UsoDeVaga::valorPago)
+                .sum();
     }
 
     /**

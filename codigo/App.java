@@ -104,6 +104,7 @@ public class App {
                         }
 
                         estacionamento.addCliente(cliente);
+                        mapClientes.put(String.valueOf(idClientes), cliente);
 
                         System.out.print("Cliente cadastrado, seu id é: " + idClientes + "\n");
 
@@ -133,7 +134,8 @@ public class App {
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
-                        estacionamento.addVeiculo(veiculo, mapClientes.get(id));
+                        Cliente cliente = mapClientes.get(id);
+                        estacionamento.addVeiculo(veiculo, cliente);
                     }
                     break;
                 case 4:
@@ -350,7 +352,6 @@ public class App {
             System.out.print("Qual o id do dono do veiculo de placa: '" + placa + "'? ");
             String idCliente = scanner.nextLine();
             Cliente cliente = mapClientes.get(idCliente);
-            cliente.addVeiculo(veiculo);
             estacionamento.addVeiculo(veiculo, cliente);
         }
     }
