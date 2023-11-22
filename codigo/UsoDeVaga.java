@@ -53,7 +53,8 @@ public class UsoDeVaga {
         int quantidadeFracoesTempo = (int) Math.ceil(calcTempo / 15.0);
         valorPago = quantidadeFracoesTempo * VALOR_FRACAO;
 
-        if (valorPago > VALOR_MAXIMO) valorPago = VALOR_MAXIMO;
+        if (valorPago > VALOR_MAXIMO)
+            valorPago = VALOR_MAXIMO;
 
         return valorPago;
     }
