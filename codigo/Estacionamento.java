@@ -2,12 +2,13 @@ import javax.print.attribute.standard.Severity;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class Estacionamento {
 
 	private String nome;
 	private List<Cliente> clientes = new ArrayList<>();
-	private List<Vaga> vagas = new ArrayList<>();
+	private PriorityQueue<Vaga> vagas = new PriorityQueue<>((Comparator.comparing(Vaga::disponivel).reversed()));
 	private int quantFileiras;
 	private int vagasPorFileira;
 
@@ -48,7 +49,6 @@ public class Estacionamento {
 				
 				Vaga x = new Vaga(i,j);
 				vagas.add(x);
-
 			}
 		}
 	}
@@ -77,12 +77,7 @@ public class Estacionamento {
 	 * @return a vaga caso ela esteja disponível, caso não tenha nenhuma vaga disponível retorna null
 	 */
 	private Vaga procuraVaga() {
-		for (Vaga vaga : vagas) {
-			if (vaga.disponivel()) {
-				return vaga;
-			}
-		}
-		return null;
+		return vagas.peek();
 	}
 	/**
 	 * Esse método tem como objetivo verificar se o veículo em questão já está cadastrado no cliente

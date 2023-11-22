@@ -26,12 +26,14 @@ public class Veiculo implements IDataToText {
      */
     public void estacionar(Vaga vaga) {
         if (vaga.disponivel()) {
+            vaga.setDisponivel(false);
             usos.add(new UsoDeVaga(vaga));
         }
     }
 
     public void estacionar(Vaga vaga, Servico servico) {
         if (vaga.disponivel()) {
+            vaga.setDisponivel(false);
             usos.add(new UsoDeVaga(vaga, servico));
         }
     }

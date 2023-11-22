@@ -42,9 +42,10 @@ public class Vaga {
 	 */
 
 	public boolean disponivel() {
-
 		return disponivel;
 	}
 
-
+	public void setDisponivel(boolean disponivel) {
+		this.disponivel = disponivel;
+	}
 }
