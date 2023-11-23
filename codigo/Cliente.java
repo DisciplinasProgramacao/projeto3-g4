@@ -153,7 +153,7 @@ public class Cliente implements IDataToText {
 
     @Override
     public String dataToText() {
-        return id + ";" + nome + ";";
+        return id + ";" + nome + ";" + tipoCliente + ";";
     }
 
     public TipoCliente getTipoCliente() {

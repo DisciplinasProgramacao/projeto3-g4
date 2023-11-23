@@ -158,6 +158,9 @@ public class App {
                         Veiculo veiculo = new Veiculo(placa);
 
                         DAOVeiculo daoVeiculo = new DAOVeiculo("veiculos.txt");
+                        Cliente cliente = mapClientes.get(id);
+                        mapVeiculos.put(placa, veiculo);
+                        estacionamento.addVeiculo(veiculo, cliente);
                         try {
                             daoVeiculo.abrirEscrita();
                             daoVeiculo.add(veiculo);
@@ -165,9 +168,6 @@ public class App {
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
-                        Cliente cliente = mapClientes.get(id);
-                        mapVeiculos.put(placa, veiculo);
-                        estacionamento.addVeiculo(veiculo, cliente);
                     }
                     break;
                 case 4:
@@ -386,7 +386,8 @@ public class App {
             String[] fields = fileReader.nextLine().split(";");
             String id = fields[0];
             String nome = fields[1];
-            Cliente cliente = new Cliente(nome, id);
+            String tipoCliente = fields[2];
+            Cliente cliente = new Cliente(nome, id, TipoCliente.valueOf(tipoCliente));
             mapClientes.put(id, cliente);
             estacionamento.addCliente(cliente);
             idClientes++;
@@ -407,7 +408,9 @@ public class App {
             String[] fields = fileReader.nextLine().split(";");
             String placa = fields[0];
             String totalDeUsos = fields[1];
+            String tipoCliente = fields[2];
             Veiculo veiculo = new Veiculo(placa);
+            veiculo.setPlano(TipoCliente.valueOf(tipoCliente));
             mapVeiculos.put(placa, veiculo);
             System.out.println("LENDO DADOS DO ARQUIVO VEICULOS");
             System.out.print("Qual o id do dono do veiculo de placa: '" + placa + "'? ");

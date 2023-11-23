@@ -102,7 +102,7 @@ public class Veiculo implements IDataToText {
 
     @Override
     public String dataToText() {
-        return placa + ";" + totalDeUsos() + ";";
+        return placa + ";" + totalDeUsos() + ";"  +tipoCliente + ";";
     }
 
     public void setPlano(TipoCliente tipoCliente) {
