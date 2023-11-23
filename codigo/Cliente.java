@@ -8,13 +8,23 @@ public class Cliente implements IDataToText {
 
     private String nome;
     private String id;
+    private TipoCliente tipoCliente;
     private Map<String, Veiculo> veiculos;
+
+    public Cliente(String nome, String id,TipoCliente tipoCliente) {
+        this.nome = nome;
+        this.id = id;
+        this.tipoCliente = tipoCliente;
+        this.veiculos = new HashMap<>(10);
+    }
 
     public Cliente(String nome, String id) {
         this.nome = nome;
         this.id = id;
+        this.tipoCliente = TipoCliente.HORISTA;
         this.veiculos = new HashMap<>(10);
     }
+
 
     /**
      * Metodo para adicionar/cadastrar um veiculo ao cliente.

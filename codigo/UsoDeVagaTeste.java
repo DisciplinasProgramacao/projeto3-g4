@@ -12,7 +12,7 @@ public class UsoDeVagaTeste{
     @BeforeEach
     public void setup() {
         vagaReal = new Vaga(0, 0);
-        usoDeVaga = new UsoDeVaga(vagaReal);
+        usoDeVaga = new UsoHorista(vagaReal);
         
         
     }

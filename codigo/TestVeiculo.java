@@ -15,7 +15,7 @@ public class TestVeiculo {
     public static void init(){
         veiculo = new Veiculo("ABC2407");
         vaga = new Vaga(2,5); 
-        usoDeVaga = new UsoDeVaga(vaga);
+        usoDeVaga = new UsoHorista(vaga);
         veiculo.estacionar(vaga);
         try {
             Thread.sleep(60000);

@@ -92,7 +92,10 @@ public class App {
                         System.out.print("Digite o nome do cliente: ");
                         String nome = scanner.nextLine();
 
-                        Cliente cliente = new Cliente(nome, String.valueOf(idClientes));
+                        System.out.print("Cliente será de qual tipo(MENSALISTA/HORISTA/DE_TURNO)? ");
+                        TipoCliente tipoCliente = TipoCliente.valueOf(scanner.nextLine());
+
+                        Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
 
                         DAOCliente daoCliente = new DAOCliente("clientes.txt");
                         try {

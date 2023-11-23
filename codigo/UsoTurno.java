@@ -1,11 +1,9 @@
-import java.time.LocalDateTime;
-
 public class UsoTurno extends UsoDeVaga {
 
-    private Turno turno;
+    private CATEGORIA turno;
     private UsoHorista horista;
 
-    public UsoTurno(Vaga vaga, Turno turno) {
+    public UsoTurno(Vaga vaga, CATEGORIA turno) {
         super(vaga);
         this.turno = turno;
     }
@@ -18,11 +16,10 @@ public class UsoTurno extends UsoDeVaga {
             return horista.valorPago(); 
         }
     }
-
-    @Override
     public boolean ehDoTurno() {
-        LocalDateTime now = LocalDateTime.now();
-        int hora = now.getHour();
-        return turno.dentroDoTurno(hora);
+//        LocalDateTime now = LocalDateTime.now();
+//        int hora = now.getHour();
+//        return turno.dentroDoTurno(hora);
+        return false;
     }
 }

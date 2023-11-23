@@ -18,7 +18,7 @@ public class TestCliente {
         veiculo = new Veiculo(PLACA);
         cliente = new Cliente("Joao", "3123213");
         vaga = new Vaga(4, 3);
-        uso = new UsoDeVaga(vaga);
+        uso = new UsoHorista(vaga);
 
         cliente.addVeiculo(veiculo);
         veiculo.estacionar(vaga);

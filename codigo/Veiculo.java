@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,14 +26,14 @@ public class Veiculo implements IDataToText {
     public void estacionar(Vaga vaga) {
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
-            usos.add(new UsoDeVaga(vaga));
+            usos.add(new UsoHorista(vaga));
         }
     }
 
     public void estacionar(Vaga vaga, Servico servico) {
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
-            usos.add(new UsoDeVaga(vaga, servico));
+            usos.add(new UsoHorista(vaga, servico));
         }
     }
 
