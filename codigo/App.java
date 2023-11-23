@@ -6,13 +6,13 @@ import java.text.NumberFormat;
 import java.util.*;
 
 public class App {
-    static Estacionamento estacionamento = new Estacionamento("estacionamento", 1, 1);
+    static Estacionamento estacionamento = null;
+    static int selecionado = 0;
     static List<Estacionamento> estacionamentosAletorios = new ArrayList<>();
     static Long idClientes = 1l;
 
     private static Map<String, Cliente> mapClientes = new HashMap<>();
     private static Map<String, Veiculo> mapVeiculos = new HashMap<>();
-
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
@@ -45,17 +45,50 @@ public class App {
         scanner.close();
     }
     public static boolean validaEstacionamento() {
-        if (estacionamento == null) {
-            return false;
-        }
-        return true;
+        return estacionamento != null;
     }
+
+    public static StringBuilder retornaArrecadacaoTotalEstacionamentos(){
+        StringBuilder retorno = new StringBuilder();
+        int atual = 1;
+        double valor = 0;
+        Collections.sort(estacionamentosAletorios, Comparator.comparingDouble(Estacionamento::totalArrecadado).reversed());
+
+        for (Estacionamento x : estacionamentosAletorios) {
+
+            double valorDeCada = x.totalArrecadado();
+
+            valor += valorDeCada;
+
+            retorno.append(" O Estacionamento ").append(atual).append(" Arrecadou R$").append(valorDeCada);
+
+            atual ++;
+        }
+
+        retorno.append("E o total arrecadado pelos 3 foi de " + valor);
+
+        return retorno;
+    };
+
+    public static int usoMensalistasMes(String mes){
+        // método no estacionamento pegando o método totalDeUsos dos clientes mensalistas
+
+        return 0;
+    };
+
+    public static double arrecadacaoMediaHoristas(String mes){
+        // método parecido com o abaixo porém considerando apenas horistas
+        return estacionamento.valorMedioPorUso();
+    };
 
     public static void cadastrarSubMenu(Scanner scanner) {
         int subEscolha;
         do {
+            if(validaEstacionamento()){
+                System.out.println("Estacionamento selecionado -> " + selecionado);
+            }
             System.out.println("Selecione o que deseja cadastrar:");
-            System.out.println("1 - Cadastrar Estacionamento");
+            System.out.println("1 - Selecionar Estacionamento");
             System.out.println("2 - Cadastrar Cliente");
             System.out.println("3 - Cadastrar Veículo");
             System.out.println("4 - Voltar ao menu principal");
@@ -64,28 +97,17 @@ public class App {
 
             switch (subEscolha) {
                 case 1:
-                    System.out.println("Opção Cadastrar Estacionamento selecionada.");
-                    if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento já cadastrado.");
-                        break;
-                    } else {
-                        scanner.nextLine();
-                        System.out.print("Digite o nome do estacionamento: ");
-                        String nome = scanner.nextLine();
+                    System.out.println("Em qual estacionamento você deseja realizar operações? (1, 2 ou 3).");
+                    int num = scanner.nextInt();
 
-                        System.out.print("Digite o número de fileiras desejadas: ");
-                        int numFileiras = scanner.nextInt();
+                    selecionado = num;
 
-                        System.out.print("Digite o número de vagas por fila: ");
-                        int numVagasPorFila = scanner.nextInt();
-
-                        estacionamento = new Estacionamento(nome, numFileiras, numVagasPorFila);
-                    }
+                    estacionamento = estacionamentosAletorios.get(num - 1);
                     break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                         break;
                     } else {
                         scanner.nextLine();
@@ -117,7 +139,7 @@ public class App {
                 case 3:
                     System.out.println("Opção Cadastrar Veículo selecionada.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                         break;
                     } else {
                         scanner.nextLine();
@@ -156,6 +178,9 @@ public class App {
         int subEscolha;
 
         do {
+            if(validaEstacionamento()){
+                System.out.println("Estacionamento selecionado -> " + selecionado);
+            }
             System.out.println("Selecione a operação de veículo:");
             System.out.println("1 - Estacionar Veículo");
             System.out.println("2 - Sair da Vaga com Veículo");
@@ -167,7 +192,7 @@ public class App {
                 case 1 -> {
                     System.out.println("Opção Estacionar Veículo selecionada.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                     } else {
                         scanner.nextLine();
                         System.out.print("Digite a placa do carro: ");
@@ -190,7 +215,7 @@ public class App {
                 case 2 -> {
                     System.out.println("Opção Sair da Vaga com Veículo selecionada.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                     } else {
                         scanner.nextLine();
                         System.out.print("Digite a placa do carro: ");
@@ -210,12 +235,18 @@ public class App {
     public static void operacoesEstacionamentoSubMenu(Scanner scanner) {
         int subEscolha;
         do {
+            if(validaEstacionamento()){
+                System.out.println("Estacionamento selecionado -> " + selecionado);
+            }
             System.out.println("Selecione a operação de cliente:");
             System.out.println("1 - Total arrecadado");
             System.out.println("2 - Arrecadação no mês");
             System.out.println("3 - Valor Médio por uso");
             System.out.println("4 - Top 5 Clientes");
-            System.out.println("5 - Voltar ao menu principal");
+            System.out.println("5 - Total arrecadado por todos estacionamentos");
+            System.out.println("6 - Média de vezes que os mensalistas usaram o estacionamento em um mês");
+            System.out.println("7 - Média de arrecadação gerada por horistas em um mês");
+            System.out.println("8 - Voltar ao menu principal");
             System.out.print("Digite o número da opção desejada: ");
             subEscolha = scanner.nextInt();
 
@@ -223,7 +254,7 @@ public class App {
                 case 1 -> {
                     System.out.println("Opção retorno do total arrecadado.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                     } else {
                         double total = estacionamento.totalArrecadado();
 
@@ -233,7 +264,7 @@ public class App {
                 case 2 -> {
                     System.out.println("Opção retorno do total arrecadado no mês.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                     } else {
                         scanner.nextLine();
                         System.out.print("Qual mês você deseja conferir: ");
@@ -248,7 +279,7 @@ public class App {
                 case 3 -> {
                     System.out.println("Opção retorno valor médio por uso.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                     } else {
                         double valorMedio = estacionamento.valorMedioPorUso();
 
@@ -258,7 +289,7 @@ public class App {
                 case 4 -> {
                     System.out.println("Opção top 5 clientes.");
                     if (!validaEstacionamento()) {
-                        System.out.println("Estacionamento não cadastrado.");
+                        System.out.println("Estacionamento não selecionado.");
                     } else {
                         scanner.nextLine();
                         System.out.print("Qual mês você deseja conferir: ");
@@ -269,7 +300,26 @@ public class App {
                         System.out.println("Os top 5 clientes são." + clientes);
                     }
                 }
-                case 5 -> System.out.println("Voltando ao menu principal.");
+                case 5 -> {
+                    System.out.println(retornaArrecadacaoTotalEstacionamentos());
+                }
+                case 6 -> {
+                    System.out.print("Qual mês você deseja conferir: ");
+                    String mes = scanner.nextLine();
+
+                    int usos = usoMensalistasMes(mes);
+
+                    System.out.println("Em média, os mensalistas utilizaram o estacionamento " + usos + " vezes em " + mes);
+                }
+                case 7 -> {
+                    System.out.print("Qual mês você deseja conferir: ");
+                    String mes = scanner.nextLine();
+
+                    double arrecadado = arrecadacaoMediaHoristas(mes);
+
+                    System.out.println("Em média, a arrecadação média dos horistas em " + mes + " foi de R$" + arrecadado);
+                }
+                case 8 -> System.out.println("Voltando ao menu principal.");
                 default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
         } while (subEscolha != 5);
