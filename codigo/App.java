@@ -17,8 +17,6 @@ public class App {
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
 
-        lerDadosArquivoClientes();
-        lerDadosArquivoVeiculos(scanner);
         GerarDados();
 
         int escolha;
@@ -44,11 +42,12 @@ public class App {
 
         scanner.close();
     }
+
     public static boolean validaEstacionamento() {
         return estacionamento != null;
     }
 
-    public static StringBuilder retornaArrecadacaoTotalEstacionamentos(){
+    public static StringBuilder retornaArrecadacaoTotalEstacionamentos() {
         StringBuilder retorno = new StringBuilder();
         int atual = 1;
         double valor = 0;
@@ -60,31 +59,36 @@ public class App {
 
             valor += valorDeCada;
 
-            retorno.append(" O Estacionamento ").append(atual).append(" Arrecadou R$").append(valorDeCada);
+            retorno.append(" O Estacionamento ").append(atual).append(" Arrecadou ").append(formatarMoeda(valorDeCada)).append("\n");
 
-            atual ++;
+            atual++;
         }
 
-        retorno.append("E o total arrecadado pelos 3 foi de " + valor);
+        retorno.append("E o total arrecadado pelos 3 foi de " + formatarMoeda(valor));
 
         return retorno;
-    };
+    }
 
-    public static int usoMensalistasMes(String mes){
+    ;
+
+    public static int usoMensalistasMes(String mes) {
         // método no estacionamento pegando o método totalDeUsos dos clientes mensalistas
-
         return 0;
-    };
+    }
 
-    public static double arrecadacaoMediaHoristas(String mes){
+    ;
+
+    public static double arrecadacaoMediaHoristas(String mes) {
         // método parecido com o abaixo porém considerando apenas horistas
         return estacionamento.valorMedioPorUso();
-    };
+    }
 
-    public static void cadastrarSubMenu(Scanner scanner) {
+    ;
+
+    public static void cadastrarSubMenu(Scanner scanner) throws FileNotFoundException {
         int subEscolha;
         do {
-            if(validaEstacionamento()){
+            if (validaEstacionamento()) {
                 System.out.println("Estacionamento selecionado -> " + selecionado);
             }
             System.out.println("Selecione o que deseja cadastrar:");
@@ -103,6 +107,8 @@ public class App {
                     selecionado = num;
 
                     estacionamento = estacionamentosAletorios.get(num - 1);
+                    lerDadosArquivoClientes();
+                    lerDadosArquivoVeiculos(scanner);
                     break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
@@ -178,7 +184,7 @@ public class App {
         int subEscolha;
 
         do {
-            if(validaEstacionamento()){
+            if (validaEstacionamento()) {
                 System.out.println("Estacionamento selecionado -> " + selecionado);
             }
             System.out.println("Selecione a operação de veículo:");
@@ -207,7 +213,7 @@ public class App {
                             Servico servico = Servico.valueOf(opcaoServico.toUpperCase());
                             System.out.println("Servico de " + servico.getNome() + " contratado!");
                             estacionamento.estacionar(placa, servico);
-                        }else {
+                        } else {
                             estacionamento.estacionar(placa);
                         }
                     }
@@ -235,7 +241,7 @@ public class App {
     public static void operacoesEstacionamentoSubMenu(Scanner scanner) {
         int subEscolha;
         do {
-            if(validaEstacionamento()){
+            if (validaEstacionamento()) {
                 System.out.println("Estacionamento selecionado -> " + selecionado);
             }
             System.out.println("Selecione a operação de cliente:");
@@ -317,12 +323,12 @@ public class App {
 
                     double arrecadado = arrecadacaoMediaHoristas(mes);
 
-                    System.out.println("Em média, a arrecadação média dos horistas em " + mes + " foi de R$" + arrecadado);
+                    System.out.println("Em média, a arrecadação média dos horistas em " + mes + " foi de " + formatarMoeda(arrecadado));
                 }
                 case 8 -> System.out.println("Voltando ao menu principal.");
                 default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (subEscolha != 5);
+        } while (subEscolha != 8);
     }
 
     static class GerarID {
@@ -368,7 +374,7 @@ public class App {
 
     private static void lerDadosArquivoClientes() throws FileNotFoundException {
         File file = new File("clientes.txt");
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -376,7 +382,7 @@ public class App {
             }
         }
         Scanner fileReader = new Scanner(new FileReader("clientes.txt"));
-        while(fileReader.hasNext()){
+        while (fileReader.hasNext()) {
             String[] fields = fileReader.nextLine().split(";");
             String id = fields[0];
             String nome = fields[1];
@@ -389,7 +395,7 @@ public class App {
 
     private static void lerDadosArquivoVeiculos(Scanner scanner) throws FileNotFoundException {
         File file = new File("veiculos.txt");
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -397,7 +403,7 @@ public class App {
             }
         }
         Scanner fileReader = new Scanner(new FileReader("veiculos.txt"));
-        while(fileReader.hasNext()){
+        while (fileReader.hasNext()) {
             String[] fields = fileReader.nextLine().split(";");
             String placa = fields[0];
             String totalDeUsos = fields[1];
@@ -405,11 +411,12 @@ public class App {
             mapVeiculos.put(placa, veiculo);
             System.out.println("LENDO DADOS DO ARQUIVO VEICULOS");
             System.out.print("Qual o id do dono do veiculo de placa: '" + placa + "'? ");
-            String idCliente = scanner.nextLine();
+            String idCliente = scanner.next();
             Cliente cliente = mapClientes.get(idCliente);
             estacionamento.addVeiculo(veiculo, cliente);
         }
     }
+
     public static String formatarMoeda(Double valor) {
         return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(valor);
     }
