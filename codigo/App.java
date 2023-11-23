@@ -93,7 +93,7 @@ public class App {
                         String nome = scanner.nextLine();
 
                         System.out.print("Cliente será de qual tipo(MENSALISTA/HORISTA/DE_TURNO)? ");
-                        TipoCliente tipoCliente = TipoCliente.valueOf(scanner.nextLine());
+                        TipoCliente tipoCliente = TipoCliente.valueOf(scanner.nextLine().toUpperCase());
 
                         Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
 
@@ -138,6 +138,7 @@ public class App {
                             System.out.println(e.getMessage());
                         }
                         Cliente cliente = mapClientes.get(id);
+                        mapVeiculos.put(placa, veiculo);
                         estacionamento.addVeiculo(veiculo, cliente);
                     }
                     break;
@@ -196,7 +197,8 @@ public class App {
                         String placa = scanner.nextLine();
 
                         double valorAPagar = estacionamento.sair(placa);
-                        System.out.println("Valor a ser pago: " + formatarMoeda(valorAPagar));
+                        Veiculo veiculo = mapVeiculos.get(placa);
+                        System.out.println("Cliente " + veiculo.getPlano().getDesc() + " - Valor a ser pago: " + formatarMoeda(valorAPagar));
                     }
                 }
                 case 3 -> System.out.println("Voltando ao menu principal.");

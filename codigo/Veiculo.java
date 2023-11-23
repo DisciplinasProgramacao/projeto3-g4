@@ -8,9 +8,11 @@ public class Veiculo implements IDataToText {
 
     private String placa;
     private List<UsoDeVaga> usos;
+    private TipoCliente tipoCliente;
 
     /**
      * Construtor para criar um veículo a partir de sua placa
+     *
      * @param placa
      */
     public Veiculo(String placa) {
@@ -21,24 +23,34 @@ public class Veiculo implements IDataToText {
     /**
      * Se a vaga passada por parâmetro estiver disponível é adicionada
      * um uso de vaga para a lista de usos de vaga.
+     *
      * @param vaga
      */
     public void estacionar(Vaga vaga) {
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
-            usos.add(new UsoHorista(vaga));
+            switch (tipoCliente) {
+                case HORISTA -> usos.add(new UsoHorista(vaga));
+                case MENSALISTA -> usos.add(new UsoMensalista(vaga));
+                case DE_TURNO -> usos.add(new UsoTurno(vaga));
+            }
         }
     }
 
     public void estacionar(Vaga vaga, Servico servico) {
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
-            usos.add(new UsoHorista(vaga, servico));
+            switch (tipoCliente) {
+                case HORISTA -> usos.add(new UsoHorista(vaga, servico));
+                case MENSALISTA -> usos.add(new UsoMensalista(vaga, servico));
+                case DE_TURNO -> usos.add(new UsoTurno(vaga, servico));
+            }
         }
     }
 
     /**
      * Chama o metodo de sair da classe UsoDeVaga e retorna o valor pago para esse uso.
+     *
      * @return
      */
     public double sair() {
@@ -49,6 +61,7 @@ public class Veiculo implements IDataToText {
 
     /**
      * Calcula e retorna o total de valores de todos os usos de vaga.
+     *
      * @return totalArrecadado nos usos
      */
     public double totalArrecadado() {
@@ -59,6 +72,7 @@ public class Veiculo implements IDataToText {
 
     /**
      * Calcula o total arrecado em um determinado mes
+     *
      * @param mes
      * @return totalArrecadado no mes
      */
@@ -71,6 +85,7 @@ public class Veiculo implements IDataToText {
 
     /**
      * Retorna o total de usos de vagas
+     *
      * @return totalDeUsos
      */
     public int totalDeUsos() {
@@ -88,5 +103,13 @@ public class Veiculo implements IDataToText {
     @Override
     public String dataToText() {
         return placa + ";" + totalDeUsos() + ";";
+    }
+
+    public void setPlano(TipoCliente tipoCliente) {
+        this.tipoCliente = tipoCliente;
+    }
+
+    public TipoCliente getPlano() {
+        return tipoCliente;
     }
 }

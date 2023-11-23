@@ -70,6 +70,6 @@ public class TestCliente {
 
     @Test
     public void retornaArrecadacaoNoMesCorretamente() {
-        assertEquals(4, cliente.arrecadadoNoMes(LocalDate.now().getMonthValue()));
+        assertEquals(4, cliente.gastoNoMes(LocalDate.now().getMonthValue()));
     }
 }

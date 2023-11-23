@@ -1,6 +1,5 @@
 public class UsoMensalista extends UsoDeVaga {
 
-
     public UsoMensalista(Vaga vaga) {
         super(vaga);
     }
@@ -11,6 +10,6 @@ public class UsoMensalista extends UsoDeVaga {
 
     @Override
     public double valorPago() {
-        return 500.00;
+        return 0d;
     }
 }
