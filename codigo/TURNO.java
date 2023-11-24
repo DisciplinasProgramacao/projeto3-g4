@@ -1,5 +1,4 @@
-
-
+import java.time.LocalTime;
 
 public enum TURNO {
 
@@ -16,4 +15,12 @@ public enum TURNO {
   public double getHora() {
     return horaInicial;
   }
+
+  public LocalTime getHoraInicial() {
+    return null;
+  }
+
+public LocalTime getHoraFinal() {
+    return null;
+}
 }
