@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+
 public class UsoTurno extends UsoDeVaga {
 
     private CATEGORIA turno;
@@ -17,6 +19,10 @@ public class UsoTurno extends UsoDeVaga {
     public UsoTurno(Vaga vaga) {
         super(vaga);
         this.horista = new UsoHorista(vaga, servico);
+    }
+
+    public UsoTurno(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico) {
+        super(vaga, entrada, saida, valorPago, servico);
     }
 
     @Override

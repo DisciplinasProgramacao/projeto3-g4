@@ -3,6 +3,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class App {
@@ -101,7 +103,7 @@ public class App {
 
             switch (subEscolha) {
                 case 1:
-                    System.out.println("Em qual estacionamento você deseja realizar operações? (1, 2 ou 3).");
+                    System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
                     int num = scanner.nextInt();
 
                     selecionado = num;
@@ -124,15 +126,6 @@ public class App {
                         TipoCliente tipoCliente = TipoCliente.valueOf(scanner.nextLine().toUpperCase());
 
                         Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
-
-                        DAOCliente daoCliente = new DAOCliente("clientes.txt");
-                        try {
-                            daoCliente.abrirEscrita();
-                            daoCliente.add(cliente);
-                            daoCliente.fechar();
-                        } catch (IOException e) {
-                            System.out.println(e.getMessage());
-                        }
 
                         estacionamento.addCliente(cliente);
                         mapClientes.put(String.valueOf(idClientes), cliente);
@@ -157,14 +150,15 @@ public class App {
 
                         Veiculo veiculo = new Veiculo(placa);
 
-                        DAOVeiculo daoVeiculo = new DAOVeiculo("veiculos.txt");
                         Cliente cliente = mapClientes.get(id);
                         mapVeiculos.put(placa, veiculo);
                         estacionamento.addVeiculo(veiculo, cliente);
+
+                        DAOCliente daoCliente = new DAOCliente("clientes.txt");
                         try {
-                            daoVeiculo.abrirEscrita();
-                            daoVeiculo.add(veiculo);
-                            daoVeiculo.fechar();
+                            daoCliente.abrirEscrita();
+                            daoCliente.add(cliente);
+                            daoCliente.fechar();
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
@@ -229,6 +223,14 @@ public class App {
 
                         double valorAPagar = estacionamento.sair(placa);
                         Veiculo veiculo = mapVeiculos.get(placa);
+                        DAOVeiculo daoVeiculo = new DAOVeiculo("veiculos.txt");
+                        try {
+                            daoVeiculo.abrirEscrita();
+                            daoVeiculo.add(veiculo);
+                            daoVeiculo.fechar();
+                        } catch (IOException e) {
+                            System.out.println(e.getMessage());
+                        }
                         System.out.println("Cliente " + veiculo.getPlano().getDesc() + " - Valor a ser pago: " + formatarMoeda(valorAPagar));
                     }
                 }
@@ -390,11 +392,19 @@ public class App {
             Cliente cliente = new Cliente(nome, id, TipoCliente.valueOf(tipoCliente));
             mapClientes.put(id, cliente);
             estacionamento.addCliente(cliente);
+            for (int i = 3; i < fields.length; i++) {
+                String placa = fields[i];
+                Veiculo veiculo = new Veiculo(placa);
+                veiculo.setPlano(TipoCliente.valueOf(tipoCliente));
+                mapVeiculos.put(placa, veiculo);
+                estacionamento.addVeiculo(veiculo, cliente);
+            }
             idClientes++;
         }
     }
 
     private static void lerDadosArquivoVeiculos(Scanner scanner) throws FileNotFoundException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         File file = new File("veiculos.txt");
         if (!file.exists()) {
             try {
@@ -404,19 +414,41 @@ public class App {
             }
         }
         Scanner fileReader = new Scanner(new FileReader("veiculos.txt"));
+
         while (fileReader.hasNext()) {
             String[] fields = fileReader.nextLine().split(";");
             String placa = fields[0];
-            String totalDeUsos = fields[1];
-            String tipoCliente = fields[2];
-            Veiculo veiculo = new Veiculo(placa);
-            veiculo.setPlano(TipoCliente.valueOf(tipoCliente));
+            int totalDeUsos = Integer.parseInt(fields[1]);
+
+            int iArq = 2;
+            if (totalDeUsos > 1) {
+                iArq += 5 * (totalDeUsos - 1);
+            }
+
+            String idVaga = fields[iArq];
+            iArq++;
+            LocalDateTime entrada = LocalDateTime.parse(fields[iArq], formatter);
+            iArq++;
+            LocalDateTime saida = LocalDateTime.parse(fields[iArq], formatter);
+            iArq++;
+            double valorPago = Double.parseDouble(fields[iArq]);
+            iArq++;
+
+            String servicoStr = fields[iArq];
+            Servico servico = servicoStr.equals("null") ? null : Servico.valueOf(servicoStr.toUpperCase());
+            iArq++;
+
+            Veiculo veiculo = mapVeiculos.get(placa);
+            Vaga vaga = new Vaga(idVaga);
+
+            TipoCliente plano = veiculo.getPlano();
+            switch (plano) {
+                case HORISTA -> veiculo.addUsoDeVaga(new UsoHorista(vaga, entrada, saida, valorPago, servico));
+                case MENSALISTA -> veiculo.addUsoDeVaga(new UsoMensalista(vaga, entrada, saida, valorPago, servico));
+                case DE_TURNO -> veiculo.addUsoDeVaga(new UsoTurno(vaga, entrada, saida, valorPago, servico));
+            }
+
             mapVeiculos.put(placa, veiculo);
-            System.out.println("LENDO DADOS DO ARQUIVO VEICULOS");
-            System.out.print("Qual o id do dono do veiculo de placa: '" + placa + "'? ");
-            String idCliente = scanner.next();
-            Cliente cliente = mapClientes.get(idCliente);
-            estacionamento.addVeiculo(veiculo, cliente);
         }
     }
 
