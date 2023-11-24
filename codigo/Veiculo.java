@@ -102,7 +102,13 @@ public class Veiculo implements IDataToText {
 
     @Override
     public String dataToText() {
-        return placa + ";" + totalDeUsos() + ";";
+        return placa + ";" + totalDeUsos() + ";"  + formatUsos();
+    }
+
+    private String formatUsos() {
+        StringBuilder builder = new StringBuilder();
+        usos.forEach(uso -> builder.append(uso));
+        return builder.toString();
     }
 
     public void setPlano(TipoCliente tipoCliente) {
@@ -111,5 +117,9 @@ public class Veiculo implements IDataToText {
 
     public TipoCliente getPlano() {
         return tipoCliente;
+    }
+
+    public void addUsoDeVaga(UsoDeVaga uso) {
+        usos.add(uso);
     }
 }

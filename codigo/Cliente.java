@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -153,7 +152,13 @@ public class Cliente implements IDataToText {
 
     @Override
     public String dataToText() {
-        return id + ";" + nome + ";";
+        return id + ";" + nome + ";" + tipoCliente + ";" + formatVeiculos();
+    }
+
+    private String formatVeiculos() {
+        StringBuilder builder = new StringBuilder();
+        veiculos.values().forEach(v -> builder.append(v.getPlaca()).append(";"));
+        return builder.toString();
     }
 
     public TipoCliente getTipoCliente() {

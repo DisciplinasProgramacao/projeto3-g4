@@ -5,6 +5,11 @@ public class Vaga {
 	private static int numeroSequencial = 1;
 	private static char letraSequencial = 'A';
 
+	public Vaga(String idVaga) {
+		this.idVaga = idVaga;
+		this.disponivel = true;
+	}
+
 	public Vaga(int fila, int numero) {
 
 		if (fila >= 0 && fila < 26) {
@@ -47,5 +52,9 @@ public class Vaga {
 
 	public void setDisponivel(boolean disponivel) {
 		this.disponivel = disponivel;
+	}
+
+	public String getIdVaga() {
+		return idVaga;
 	}
 }

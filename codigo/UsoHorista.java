@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class UsoHorista extends UsoDeVaga {
@@ -12,6 +13,10 @@ public class UsoHorista extends UsoDeVaga {
     public UsoHorista(Vaga vaga, Servico servico) {
         super(vaga, servico);
         contratarServico(servico);
+    }
+
+    public UsoHorista(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico) {
+        super(vaga, entrada, saida, valorPago, servico);
     }
 
     @Override
