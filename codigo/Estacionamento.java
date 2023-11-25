@@ -38,7 +38,10 @@ public class Estacionamento {
      */
     public void addCliente(Cliente cliente) {
         clientes.put(cliente.getId(), cliente);
+    }
 
+    public void addCliente(Cliente cliente, TURNO turno) {
+        clientes.put(cliente.getId(), cliente);
     }
 
     /**

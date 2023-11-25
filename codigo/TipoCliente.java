@@ -5,6 +5,7 @@ public enum TipoCliente{
 
     private final String desc;
     private final double mensalidade;
+    private TURNO turno;
 
     TipoCliente(String desc, double mensalidade){
         this.desc = desc;
@@ -19,4 +20,11 @@ public enum TipoCliente{
         return desc;
     }
 
+    public void setTurno(TURNO turno) {
+        this.turno = turno;
+   }
+
+    public TURNO getTurno() {
+        return turno;
+    }
 }

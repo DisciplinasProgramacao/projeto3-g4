@@ -32,7 +32,7 @@ public class Veiculo implements IDataToText {
             switch (tipoCliente) {
                 case HORISTA -> usos.add(new UsoHorista(vaga));
                 case MENSALISTA -> usos.add(new UsoMensalista(vaga));
-                case DE_TURNO -> usos.add(new UsoTurno(vaga));
+                case DE_TURNO -> usos.add(new UsoTurno(vaga, tipoCliente.getTurno()));
             }
         }
     }
@@ -43,7 +43,7 @@ public class Veiculo implements IDataToText {
             switch (tipoCliente) {
                 case HORISTA -> usos.add(new UsoHorista(vaga, servico));
                 case MENSALISTA -> usos.add(new UsoMensalista(vaga, servico));
-                case DE_TURNO -> usos.add(new UsoTurno(vaga, servico));
+                case DE_TURNO -> usos.add(new UsoTurno(vaga, servico, tipoCliente.getTurno()));
             }
         }
     }

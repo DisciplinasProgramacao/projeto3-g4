@@ -6,10 +6,10 @@ public class UsoTurno extends UsoDeVaga {
     private TURNO turno;
     private UsoHorista horista;
 
-    public UsoTurno(Vaga vaga, Servico servico) {
+    public UsoTurno(Vaga vaga, Servico servico, TURNO turno) {
         super(vaga, servico);
         this.horista = new UsoHorista(vaga, servico);
-        this.turno = TURNO.MANHA;
+        this.turno = turno;
     }
 
     public UsoTurno(Vaga vaga, TURNO turno) {
@@ -18,15 +18,9 @@ public class UsoTurno extends UsoDeVaga {
         this.horista = new UsoHorista(vaga, servico);
     }
 
-    public UsoTurno(Vaga vaga) {
-        super(vaga);
-        this.horista = new UsoHorista(vaga, servico);
-        this.turno = TURNO.NOITE;
-    }
-
-    public UsoTurno(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico) {
+    public UsoTurno(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico, TURNO turno) {
         super(vaga, entrada, saida, valorPago, servico);
-        this.turno = TURNO.NOITE;
+        this.turno = turno;
     }
 
     @Override
@@ -34,9 +28,9 @@ public class UsoTurno extends UsoDeVaga {
         LocalTime horaAtual = LocalTime.now();
 
         if (ehDoTurno(horaAtual)) {
-            return 0d; // Está dentro do turno, não há cobrança extra.
+            return 0d;
         } else {
-            return horista.sair(); // Fora do turno, usa a lógica de cobrança horista.
+            return horista.sair() - servico.getValor();
         }
     }
 
@@ -47,5 +41,9 @@ public class UsoTurno extends UsoDeVaga {
             dentroDoTurno = true;
         }
         return dentroDoTurno;
+    }
+
+    public void setTurno(TURNO turno) {
+        this.turno = turno;
     }
 }

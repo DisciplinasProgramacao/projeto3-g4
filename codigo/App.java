@@ -124,11 +124,15 @@ public class App {
 
                         System.out.print("Cliente será de qual tipo(MENSALISTA/HORISTA/DE_TURNO)? ");
                         TipoCliente tipoCliente = TipoCliente.valueOf(scanner.nextLine().toUpperCase());
+
+                        Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
+
                         if (tipoCliente == TipoCliente.DE_TURNO) {
                             System.out.print("Qual turno você gostaria de escolher(manhã, tarde ou noite)? ");
                             TURNO turno = TURNO.valueOf(scanner.next().toUpperCase());
+                            System.out.println("Turno " + turno +  " escolhido!");
+                            tipoCliente.setTurno(turno);
                         }
-                        Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
 
                         estacionamento.addCliente(cliente);
                         mapClientes.put(String.valueOf(idClientes), cliente);
@@ -206,7 +210,7 @@ public class App {
                         String opcao = scanner.nextLine();
 
                         if (opcao.trim().equalsIgnoreCase("s")) {
-                            System.out.println("Qual serviço você gostaria de contratar(MANOBRISTA/LAVAGEM/POLIMENTO)? ");
+                            System.out.print("Qual serviço você gostaria de contratar(MANOBRISTA/LAVAGEM/POLIMENTO)? ");
                             String opcaoServico = scanner.nextLine();
                             Servico servico = Servico.valueOf(opcaoServico.toUpperCase());
                             System.out.println("Servico de " + servico.getNome() + " contratado!");
@@ -446,10 +450,11 @@ public class App {
             Vaga vaga = new Vaga(idVaga);
 
             TipoCliente plano = veiculo.getPlano();
+            plano.setTurno(TURNO.NOITE);
             switch (plano) {
                 case HORISTA -> veiculo.addUsoDeVaga(new UsoHorista(vaga, entrada, saida, valorPago, servico));
                 case MENSALISTA -> veiculo.addUsoDeVaga(new UsoMensalista(vaga, entrada, saida, valorPago, servico));
-                case DE_TURNO -> veiculo.addUsoDeVaga(new UsoTurno(vaga, entrada, saida, valorPago, servico));
+                case DE_TURNO -> veiculo.addUsoDeVaga(new UsoTurno(vaga, entrada, saida, valorPago, servico, plano.getTurno()));
             }
 
             mapVeiculos.put(placa, veiculo);
