@@ -25,7 +25,11 @@ public class App {
 
         do {
             System.out.println("Selecione uma das opções:");
-            System.out.println("1 - Cadastrar");
+            if(validaEstacionamento()){
+                System.out.println("1 - Cadastrar");
+            }else {
+                System.out.println("1 - Cadastrar (selecione o estacionamento a ser analisado)");
+            }
             System.out.println("2 - Operações de Veículo");
             System.out.println("3 - Operações de Estacionamento");
             System.out.println("4 - Sair");
@@ -53,7 +57,7 @@ public class App {
         StringBuilder retorno = new StringBuilder();
         int atual = 1;
         double valor = 0;
-        Collections.sort(estacionamentosAletorios, Comparator.comparingDouble(Estacionamento::totalArrecadado).reversed());
+        estacionamentosAletorios.sort(Comparator.comparingDouble(Estacionamento::totalArrecadado).reversed());
 
         for (Estacionamento x : estacionamentosAletorios) {
 
@@ -73,16 +77,14 @@ public class App {
 
     ;
 
-    public static int usoMensalistasMes(String mes) {
-        // método no estacionamento pegando o método totalDeUsos dos clientes mensalistas
-        return 0;
+    public static int usoMensalistasMes(int mes) {
+        return estacionamento.quantidadeUsosMes(mes, TipoCliente.MENSALISTA);
     }
 
     ;
 
-    public static double arrecadacaoMediaHoristas(String mes) {
-        // método parecido com o abaixo porém considerando apenas horistas
-        return estacionamento.valorMedioPorUso();
+    public static double arrecadacaoMediaHoristas(int mes) {
+        return estacionamento.arrecadacaoNoMesPorTipo(mes, TipoCliente.HORISTA);
     }
 
     ;
@@ -320,20 +322,28 @@ public class App {
                     System.out.println(retornaArrecadacaoTotalEstacionamentos());
                 }
                 case 6 -> {
-                    System.out.print("Qual mês você deseja conferir: ");
-                    String mes = scanner.nextLine();
+                    if (!validaEstacionamento()) {
+                        System.out.println("Estacionamento não selecionado.");
+                    } else {
+                        System.out.print("Qual mês você deseja conferir: ");
+                        int mes = scanner.nextInt();
 
-                    int usos = usoMensalistasMes(mes);
+                        int usos = usoMensalistasMes(mes);
 
-                    System.out.println("Em média, os mensalistas utilizaram o estacionamento " + usos + " vezes em " + mes);
+                        System.out.println("Em média, os mensalistas utilizaram o estacionamento " + usos + " vezes no mês " + mes);
+                    }
                 }
                 case 7 -> {
-                    System.out.print("Qual mês você deseja conferir: ");
-                    String mes = scanner.nextLine();
+                    if (!validaEstacionamento()) {
+                        System.out.println("Estacionamento não selecionado.");
+                    } else {
+                        System.out.print("Qual mês você deseja conferir: ");
+                        int mes = scanner.nextInt();
 
-                    double arrecadado = arrecadacaoMediaHoristas(mes);
+                        double arrecadado = arrecadacaoMediaHoristas(mes);
 
-                    System.out.println("Em média, a arrecadação média dos horistas em " + mes + " foi de " + formatarMoeda(arrecadado));
+                        System.out.println("Em média, a arrecadação média dos horistas no mês " + mes + " foi de " + formatarMoeda(arrecadado));
+                    }
                 }
                 case 8 -> System.out.println("Voltando ao menu principal.");
                 default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");

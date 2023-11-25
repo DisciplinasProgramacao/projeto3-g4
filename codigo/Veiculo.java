@@ -92,6 +92,23 @@ public class Veiculo implements IDataToText {
         return usos.size();
     }
 
+    /**
+     * Retorna o total de usos de vagas por mensalistas em um mês específico
+     *
+     * @return qtdUsos
+     */
+    public int totalDeUsosMes(int mes){
+        int qtdUsos = 0;
+
+        for (UsoDeVaga x : usos) {
+            if(x.ehDoMes(mes)){
+                qtdUsos++;
+            }
+        }
+
+        return qtdUsos;
+    };
+
     public String getPlaca() {
         return placa;
     }
