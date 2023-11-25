@@ -42,8 +42,4 @@ public class UsoTurno extends UsoDeVaga {
         }
         return dentroDoTurno;
     }
-
-    public void setTurno(TURNO turno) {
-        this.turno = turno;
-    }
 }
