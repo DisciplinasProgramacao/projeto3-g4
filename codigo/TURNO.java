@@ -2,25 +2,23 @@ import java.time.LocalTime;
 
 public enum TURNO {
 
-  MANHA(8.01),
-  TARDE(12.01),
-  NOITE(18.01);
+    MANHA(LocalTime.of(8, 0), LocalTime.of(12, 0)),
+    TARDE(LocalTime.of(12, 1), LocalTime.of(18, 0)),
+    NOITE(LocalTime.of(18, 1), LocalTime.of(23, 59));
 
-  private double horaInicial;
+    private LocalTime horaInicial;
+    private LocalTime horaFinal;
 
-  private TURNO(double horaInicial) {
-    this.horaInicial = horaInicial;
-  }
+    TURNO(LocalTime horaInicial, LocalTime horaFinal) {
+        this.horaInicial = horaInicial;
+        this.horaFinal = horaFinal;
+    }
 
-  public double getHora() {
-    return horaInicial;
-  }
+    public LocalTime getHoraInicial() {
+        return horaInicial;
+    }
 
-  public LocalTime getHoraInicial() {
-    return null;
-  }
-
-public LocalTime getHoraFinal() {
-    return null;
-}
+    public LocalTime getHoraFinal() {
+        return horaFinal;
+    }
 }

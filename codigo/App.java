@@ -124,7 +124,10 @@ public class App {
 
                         System.out.print("Cliente será de qual tipo(MENSALISTA/HORISTA/DE_TURNO)? ");
                         TipoCliente tipoCliente = TipoCliente.valueOf(scanner.nextLine().toUpperCase());
-
+                        if (tipoCliente == TipoCliente.DE_TURNO) {
+                            System.out.print("Qual turno você gostaria de escolher(manhã, tarde ou noite)? ");
+                            TURNO turno = TURNO.valueOf(scanner.next().toUpperCase());
+                        }
                         Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
 
                         estacionamento.addCliente(cliente);
@@ -171,7 +174,8 @@ public class App {
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                     break;
             }
-        } while (subEscolha != 4);
+        }
+        while (subEscolha != 4);
     }
 
     public static void operacoesVeiculoSubMenu(Scanner scanner) {
