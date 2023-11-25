@@ -59,6 +59,21 @@ public class Cliente implements IDataToText {
     }
 
     /**
+     * Metodo para verificar o tatal de usos do cliente no estacionamento em um mês específico.
+     *
+     * @return retorna o total de usos de todos os veiculos do cliente em um mês específico.
+     */
+    public int totalDeUsosMes(int mes, TipoCliente tipo){
+        int qtdUsos = 0;
+        if(tipoCliente == tipo) {
+            qtdUsos += veiculos.entrySet().stream()
+                    .mapToInt(entry -> entry.getValue().totalDeUsosMes(mes))
+                    .sum();
+        }
+        return qtdUsos;
+    };
+
+    /**
      * Metodo para calcular o total arrecadado pelo veiculo do cliente, cujo a placa será dada como parametro.
      *
      * @param placa recebe a placa como parametro para decidir qual veiculo sera pesquisado do cliente.

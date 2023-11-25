@@ -150,6 +150,27 @@ public class Estacionamento {
     }
 
     /**
+     * Calcula a arrecadação total do estacionamento em um determinado mês para um tipo específico de cliente.
+     * Este método itera sobre a lista de clientes, verifica se o cliente pertence ao tipo especificado
+     * e, em caso afirmativo, adiciona o valor gasto por esse cliente no mês à arrecadação total.
+     *
+     * @param mes   Mês de interesse a ser analisado.
+     * @param tipo  Tipo de cliente para o qual a arrecadação será calculada.
+     * @return      O valor total arrecadado no estacionamento para o tipo de cliente especificado no mês.
+     */
+    public double arrecadacaoNoMesPorTipo(int mes, TipoCliente tipo) {
+        double valor = 0;
+
+        for (Cliente x : clientes.values()) {
+            if(x.getTipoCliente() == tipo){
+                valor += x.gastoNoMes(mes);
+            }
+        }
+
+        return valor;
+    }
+
+    /**
      * Esse método tem como objetivo pegar o total de usos dos clientes do estacionamente e o total de arrecadação dos clientes e
      * retornar o valor medio por uso.
      *
@@ -201,4 +222,21 @@ public class Estacionamento {
         }
         return top5.toString();
     }
+    /**
+     * Calcula a quantidade total de usos do estacionamento em um determinado mês para um tipo específico de cliente.
+     * Este método itera sobre a lista de clientes e chama o método totalDeUsosMes para cada cliente,
+     * somando a quantidade de usos para o tipo de cliente especificado.
+     *
+     * @param mes   Mês de interesse a ser analisado.
+     * @param tipo  Tipo de cliente para o qual a quantidade de usos será calculada.
+     * @return      Um int contendo a quantidade total de usos do estacionamento para o tipo de cliente especificado no mês.
+     */
+    public int quantidadeUsosMes(int mes, TipoCliente tipo){
+      int qtdUsos = 0;
+        for (Cliente x : clientes.values()) {
+            qtdUsos += x.totalDeUsosMes(mes, tipo);
+        }
+
+      return qtdUsos;
+    };
 }
