@@ -25,9 +25,9 @@ public class App {
 
         do {
             System.out.println("Selecione uma das opções:");
-            if(validaEstacionamento()){
+            if (validaEstacionamento()) {
                 System.out.println("1 - Cadastrar");
-            }else {
+            } else {
                 System.out.println("1 - Cadastrar (selecione o estacionamento a ser analisado)");
             }
             System.out.println("2 - Operações de Veículo");
@@ -132,7 +132,7 @@ public class App {
                         if (tipoCliente == TipoCliente.DE_TURNO) {
                             System.out.print("Qual turno você gostaria de escolher(manhã, tarde ou noite)? ");
                             TURNO turno = TURNO.valueOf(scanner.next().toUpperCase());
-                            System.out.println("Turno " + turno +  " escolhido!");
+                            System.out.println("Turno " + turno + " escolhido!");
                             tipoCliente.setTurno(turno);
                         }
 
@@ -461,11 +461,19 @@ public class App {
 
             TipoCliente plano = veiculo.getPlano();
             plano.setTurno(TURNO.NOITE);
+
+            UsoFactory usoFactory = new UsoFactory();
+            String desc = "";
             switch (plano) {
-                case HORISTA -> veiculo.addUsoDeVaga(new UsoHorista(vaga, entrada, saida, valorPago, servico));
-                case MENSALISTA -> veiculo.addUsoDeVaga(new UsoMensalista(vaga, entrada, saida, valorPago, servico));
-                case DE_TURNO -> veiculo.addUsoDeVaga(new UsoTurno(vaga, entrada, saida, valorPago, servico, plano.getTurno()));
+                case HORISTA -> desc = "horista";
+                case MENSALISTA -> desc = "mensalista";
+                case DE_TURNO -> desc = "turno";
             }
+            UsoDeVaga uso = usoFactory.get(desc, vaga, entrada, saida, valorPago, servico);
+            if(uso.getClass() == UsoTurno.class){
+                ((UsoTurno) uso).setTurno(plano.getTurno());
+            }
+            veiculo.addUsoDeVaga(uso);
 
             mapVeiculos.put(placa, veiculo);
         }

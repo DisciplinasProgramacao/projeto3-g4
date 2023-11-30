@@ -27,24 +27,39 @@ public class Veiculo implements IDataToText {
      * @param vaga
      */
     public void estacionar(Vaga vaga) {
+        UsoFactory usoFactory = new UsoFactory();
+        String desc = "";
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
             switch (tipoCliente) {
-                case HORISTA -> usos.add(new UsoHorista(vaga));
-                case MENSALISTA -> usos.add(new UsoMensalista(vaga));
-                case DE_TURNO -> usos.add(new UsoTurno(vaga, tipoCliente.getTurno()));
+                case HORISTA -> desc = "horista";
+                case MENSALISTA -> desc = "mensalista";
+                case DE_TURNO -> desc = "turno";
             }
+            UsoDeVaga uso = usoFactory.get(desc, vaga);
+            if (uso.getClass() == UsoTurno.class) {
+                ((UsoTurno) uso).setTurno(tipoCliente.getTurno());
+            }
+            usos.add(uso);
         }
     }
 
     public void estacionar(Vaga vaga, Servico servico) {
+        UsoFactory usoFactory = new UsoFactory();
+        String desc = "";
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
             switch (tipoCliente) {
-                case HORISTA -> usos.add(new UsoHorista(vaga, servico));
-                case MENSALISTA -> usos.add(new UsoMensalista(vaga, servico));
-                case DE_TURNO -> usos.add(new UsoTurno(vaga, servico, tipoCliente.getTurno()));
+                case HORISTA -> desc = "horista";
+                case MENSALISTA -> desc = "mensalista";
+                case DE_TURNO -> desc = "turno";
+
             }
+            UsoDeVaga uso = usoFactory.get(desc, vaga, servico);
+            if (uso.getClass() == UsoTurno.class) {
+                ((UsoTurno) uso).setTurno(tipoCliente.getTurno());
+            }
+            usos.add(uso);
         }
     }
 
@@ -97,17 +112,19 @@ public class Veiculo implements IDataToText {
      *
      * @return qtdUsos
      */
-    public int totalDeUsosMes(int mes){
+    public int totalDeUsosMes(int mes) {
         int qtdUsos = 0;
 
         for (UsoDeVaga x : usos) {
-            if(x.ehDoMes(mes)){
+            if (x.ehDoMes(mes)) {
                 qtdUsos++;
             }
         }
 
         return qtdUsos;
-    };
+    }
+
+    ;
 
     public String getPlaca() {
         return placa;
@@ -119,7 +136,7 @@ public class Veiculo implements IDataToText {
 
     @Override
     public String dataToText() {
-        return placa + ";" + totalDeUsos() + ";"  + formatUsos();
+        return placa + ";" + totalDeUsos() + ";" + formatUsos();
     }
 
     private String formatUsos() {
