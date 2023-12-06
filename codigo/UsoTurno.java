@@ -13,7 +13,6 @@ public class UsoTurno extends UsoDeVaga {
 
     public UsoTurno(Vaga vaga) {
         super(vaga);
-        this.horista = new UsoHorista(vaga, servico);
     }
 
     public UsoTurno(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico) {

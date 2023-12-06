@@ -124,8 +124,6 @@ public class Veiculo implements IDataToText {
         return qtdUsos;
     }
 
-    ;
-
     public String getPlaca() {
         return placa;
     }
@@ -141,7 +139,7 @@ public class Veiculo implements IDataToText {
 
     private String formatUsos() {
         StringBuilder builder = new StringBuilder();
-        usos.forEach(uso -> builder.append(uso));
+        usos.forEach(builder::append);
         return builder.toString();
     }
 
