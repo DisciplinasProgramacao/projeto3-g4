@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -62,22 +63,26 @@ public class Estacionamento {
      *
      * @param placa String da placa do veículo que deseja estacionar em questão;
      */
-    public void estacionar(String placa) {
+    public boolean estacionar(String placa) {
         Veiculo veiculo = procuraVeiculo(placa);
         Vaga vaga = procuraVaga();
 
         if (vaga != null && veiculo != null) {
             veiculo.estacionar(vaga);
+            return true;
         }
+        return false;
     }
 
-    public void estacionar(String placa, Servico servico) {
+    public boolean estacionar(String placa, Servico servico) {
         Veiculo veiculo = procuraVeiculo(placa);
         Vaga vaga = procuraVaga();
 
         if (vaga != null && veiculo != null) {
             veiculo.estacionar(vaga, servico);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -123,13 +128,9 @@ public class Estacionamento {
      * @return valor do total arrecadado pelo estacionamento;
      */
     public double totalArrecadado() {
-        double total = clientes.values().stream()
+        return clientes.values().stream()
                 .mapToDouble(Cliente::arrecadadoTotal)
                 .sum();
-        total += clientes.values().stream()
-                .mapToDouble(c -> c.getTipoCliente().getMensalidade())
-                .sum();
-        return total;
     }
 
     /**
@@ -140,13 +141,9 @@ public class Estacionamento {
      */
 
     public double arrecadacaoNoMes(int mes) {
-        double valor = clientes.values().stream()
+        return clientes.values().stream()
                 .mapToDouble(c -> c.gastoNoMes(mes))
                 .sum();
-        valor += clientes.values().stream()
-                .mapToDouble(c -> c.getTipoCliente().getMensalidade())
-                .sum();
-        return valor;
     }
 
     /**
@@ -154,20 +151,15 @@ public class Estacionamento {
      * Este método itera sobre a lista de clientes, verifica se o cliente pertence ao tipo especificado
      * e, em caso afirmativo, adiciona o valor gasto por esse cliente no mês à arrecadação total.
      *
-     * @param mes   Mês de interesse a ser analisado.
-     * @param tipo  Tipo de cliente para o qual a arrecadação será calculada.
-     * @return      O valor total arrecadado no estacionamento para o tipo de cliente especificado no mês.
+     * @param mes  Mês de interesse a ser analisado.
+     * @param tipo Tipo de cliente para o qual a arrecadação será calculada.
+     * @return O valor total arrecadado no estacionamento para o tipo de cliente especificado no mês.
      */
     public double arrecadacaoNoMesPorTipo(int mes, TipoCliente tipo) {
-        double valor = 0;
-
-        for (Cliente x : clientes.values()) {
-            if(x.getTipoCliente() == tipo){
-                valor += x.gastoNoMes(mes);
-            }
-        }
-
-        return valor;
+        return  clientes.values().stream()
+                .filter(c -> c.getTipoCliente() == tipo)
+                .mapToDouble(x -> x.gastoNoMes(mes))
+                .sum();
     }
 
     /**
@@ -178,7 +170,7 @@ public class Estacionamento {
      */
     public double valorMedioPorUso() {
         double sum = clientes.values().stream()
-                .mapToDouble(Cliente::arrecadadoTotal)
+                .mapToDouble(Cliente::arrecadadoTotalDeUsos)
                 .sum();
         double usos = clientes.values().stream()
                 .mapToInt(Cliente::totalDeUsos)
@@ -222,21 +214,26 @@ public class Estacionamento {
         }
         return top5.toString();
     }
+
     /**
      * Calcula a quantidade total de usos do estacionamento em um determinado mês para um tipo específico de cliente.
      * Este método itera sobre a lista de clientes e chama o método totalDeUsosMes para cada cliente,
      * somando a quantidade de usos para o tipo de cliente especificado.
      *
-     * @param mes   Mês de interesse a ser analisado.
-     * @param tipo  Tipo de cliente para o qual a quantidade de usos será calculada.
-     * @return      Um int contendo a quantidade total de usos do estacionamento para o tipo de cliente especificado no mês.
+     * @param mes  Mês de interesse a ser analisado.
+     * @param tipo Tipo de cliente para o qual a quantidade de usos será calculada.
+     * @return Um int contendo a quantidade total de usos do estacionamento para o tipo de cliente especificado no mês.
      */
-    public int quantidadeUsosMes(int mes, TipoCliente tipo){
-      int qtdUsos = 0;
+    public int quantidadeUsosMes(int mes, TipoCliente tipo) {
+        int qtdUsos = 0;
         for (Cliente x : clientes.values()) {
             qtdUsos += x.totalDeUsosMes(mes, tipo);
         }
 
-      return qtdUsos;
-    };
+        return qtdUsos;
+    }
+
+    public Map<String, Cliente> getClientes() {
+        return Collections.unmodifiableMap(clientes);
+    }
 }

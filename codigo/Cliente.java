@@ -90,12 +90,18 @@ public class Cliente implements IDataToText {
      * @return retorna o total arrecadado pelo cliente, de todos os veiculos.
      */
     public double arrecadadoTotal() {
+        double valor = veiculos.values().stream()
+                .mapToDouble(Veiculo::totalArrecadado)
+                .sum();
+        valor += tipoCliente.getMensalidade();
+        return valor;
+    }
+
+    public double arrecadadoTotalDeUsos() {
         return veiculos.values().stream()
                 .mapToDouble(Veiculo::totalArrecadado)
                 .sum();
     }
-
-
     /**
      * Metodo para calcular o total arrecadado no mes pelo cliente.
      *
@@ -106,10 +112,7 @@ public class Cliente implements IDataToText {
         double valor = veiculos.values().stream()
                 .mapToDouble(v -> v.arrecadadoNoMes(mes))
                 .sum();
-        valor += veiculos.values().stream()
-                .filter(x -> x.getPlano() != TipoCliente.HORISTA)
-                .mapToDouble(x -> x.getPlano().getMensalidade())
-                .sum();
+        valor += tipoCliente.getMensalidade();
         return valor;
     }
 
