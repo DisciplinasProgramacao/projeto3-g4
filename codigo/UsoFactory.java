@@ -10,7 +10,9 @@ public class UsoFactory {
         factories = new HashMap<>();
         factories.put("horista", new FabricaUsoHorista());
         factories.put("mensalista", new FabricaUsoMensalista());
-        factories.put("turno", new FabricaUsoTurno());
+        factories.put("turnoMANHA", new FabricaUsoTurno(TURNO.MANHA));
+        factories.put("turnoTARDE", new FabricaUsoTurno(TURNO.TARDE));
+        factories.put("turnoNOITE", new FabricaUsoTurno(TURNO.NOITE));
     }
 
     public UsoDeVaga get(String desc, Vaga vaga){
