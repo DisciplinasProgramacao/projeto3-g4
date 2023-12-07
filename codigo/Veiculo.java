@@ -34,12 +34,9 @@ public class Veiculo implements IDataToText {
             switch (tipoCliente) {
                 case HORISTA -> desc = "horista";
                 case MENSALISTA -> desc = "mensalista";
-                case DE_TURNO -> desc = "turno";
+                case DE_TURNO -> desc = "turno" + tipoCliente.getTurno().name();
             }
             UsoDeVaga uso = usoFactory.get(desc, vaga);
-            if (uso.getClass() == UsoTurno.class) {
-                ((UsoTurno) uso).setTurno(tipoCliente.getTurno());
-            }
             usos.add(uso);
         }
     }
@@ -52,13 +49,9 @@ public class Veiculo implements IDataToText {
             switch (tipoCliente) {
                 case HORISTA -> desc = "horista";
                 case MENSALISTA -> desc = "mensalista";
-                case DE_TURNO -> desc = "turno";
-
+                case DE_TURNO -> desc = "turno" + tipoCliente.getTurno().name();
             }
             UsoDeVaga uso = usoFactory.get(desc, vaga, servico);
-            if (uso.getClass() == UsoTurno.class) {
-                ((UsoTurno) uso).setTurno(tipoCliente.getTurno());
-            }
             usos.add(uso);
         }
     }

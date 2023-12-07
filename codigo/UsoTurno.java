@@ -13,10 +13,12 @@ public class UsoTurno extends UsoDeVaga {
 
     public UsoTurno(Vaga vaga) {
         super(vaga);
+        this.horista = new UsoHorista(vaga);
     }
 
     public UsoTurno(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico) {
         super(vaga, entrada, saida, valorPago, servico);
+        this.horista = new UsoHorista(vaga, entrada, saida, valorPago, servico);
     }
 
     @Override
@@ -26,7 +28,11 @@ public class UsoTurno extends UsoDeVaga {
         if (ehDoTurno(horaAtual)) {
             return 0d;
         } else {
-            return horista.sair() - servico.getValor();
+            if(servico == null)
+                return horista.sair();
+            else{
+                return horista.sair() - super.servico.getValor();
+            }
         }
     }
 

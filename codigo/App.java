@@ -467,12 +467,9 @@ public class App {
             switch (plano) {
                 case HORISTA -> desc = "horista";
                 case MENSALISTA -> desc = "mensalista";
-                case DE_TURNO -> desc = "turno";
+                case DE_TURNO -> desc = "turno" + plano.getTurno().name();
             }
             UsoDeVaga uso = usoFactory.get(desc, vaga, entrada, saida, valorPago, servico);
-            if(uso.getClass() == UsoTurno.class){
-                ((UsoTurno) uso).setTurno(plano.getTurno());
-            }
             veiculo.addUsoDeVaga(uso);
 
             mapVeiculos.put(placa, veiculo);
