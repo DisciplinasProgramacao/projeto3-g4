@@ -57,4 +57,9 @@ public class Vaga {
 	public String getIdVaga() {
 		return idVaga;
 	}
+
+	@Override
+	public String toString() {
+		return "Vaga: " + idVaga;
+	}
 }

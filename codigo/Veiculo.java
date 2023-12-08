@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -115,6 +116,18 @@ public class Veiculo implements IDataToText {
         }
 
         return qtdUsos;
+    }
+
+    public String relatorioUsosDeVagaVeiculo() {
+        StringBuilder relatorio = new StringBuilder();
+        relatorio.append("\n         RELATORIO DE USOS DE VAGA\n");
+        relatorio.append("-------------------------------------------");
+        relatorio.append("\nVeiculo de placa: " + placa + "\n");
+        relatorio.append("-------------------------------------------\n");
+        usos.stream()
+                .sorted(Comparator.comparingDouble(u -> u.valorPago()))
+                .forEach(u -> relatorio.append(u.relatorioDeUsoParaVeiculo()).append("\n").append("-------------------------------------------\n"));
+        return relatorio.toString();
     }
 
     public String getPlaca() {
