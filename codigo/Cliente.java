@@ -31,21 +31,29 @@ public class Cliente implements IDataToText {
      * @param veiculo Recebe veiculo como parâmetro para vincular ao cliente.
      */
     public void addVeiculo(Veiculo veiculo) {
-        veiculo.setPlano(this.tipoCliente);
-        veiculos.put(veiculo.getPlaca(), veiculo);
+        try {
+            if (possuiVeiculo(veiculo.getPlaca()) == null) {
+                veiculo.setPlano(this.tipoCliente);
+                veiculos.put(veiculo.getPlaca(), veiculo);
+            } else {
+                throw new IllegalArgumentException("Veículo já cadastrado para este cliente");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
-
 
     /**
      * Metodo para verificar se o cliente possui um determiando veículo.
      *
-     * @param placa Recebe placa como parâmetro para procurar, com o metodo equals, na lista de veiculos para ver se ele pertence ao cliente.
-     * @return retorna o veículo se o cliente possuir o carro, caso contrário retorna null.
+     * @param placa Recebe placa como parâmetro para procurar, com o metodo equals,
+     *              na lista de veiculos para ver se ele pertence ao cliente.
+     * @return retorna o veículo se o cliente possuir o carro, caso contrário
+     *         retorna null.
      */
     public Veiculo possuiVeiculo(String placa) {
         return veiculos.get(placa);
     }
-
 
     /**
      * Metodo para verificar o tatal de usos do cliente no estacionamento.
@@ -59,13 +67,15 @@ public class Cliente implements IDataToText {
     }
 
     /**
-     * Metodo para verificar o tatal de usos do cliente no estacionamento em um mês específico.
+     * Metodo para verificar o tatal de usos do cliente no estacionamento em um mês
+     * específico.
      *
-     * @return retorna o total de usos de todos os veiculos do cliente em um mês específico.
+     * @return retorna o total de usos de todos os veiculos do cliente em um mês
+     *         específico.
      */
-    public int totalDeUsosMes(int mes, TipoCliente tipo){
+    public int totalDeUsosMes(int mes, TipoCliente tipo) {
         int qtdUsos = 0;
-        if(tipoCliente == tipo) {
+        if (tipoCliente == tipo) {
             qtdUsos += veiculos.entrySet().stream()
                     .mapToInt(entry -> entry.getValue().totalDeUsosMes(mes))
                     .sum();
@@ -74,10 +84,13 @@ public class Cliente implements IDataToText {
     };
 
     /**
-     * Metodo para calcular o total arrecadado pelo veiculo do cliente, cujo a placa será dada como parametro.
+     * Metodo para calcular o total arrecadado pelo veiculo do cliente, cujo a placa
+     * será dada como parametro.
      *
-     * @param placa recebe a placa como parametro para decidir qual veiculo sera pesquisado do cliente.
-     * @return retorna o total arrecadado por veiculo (pesquisado pela placa) do cliente.
+     * @param placa recebe a placa como parametro para decidir qual veiculo sera
+     *              pesquisado do cliente.
+     * @return retorna o total arrecadado por veiculo (pesquisado pela placa) do
+     *         cliente.
      */
     public double arrecadadoPorVeiculo(String placa) {
         Veiculo veiculo = veiculos.get(placa);
@@ -102,6 +115,7 @@ public class Cliente implements IDataToText {
                 .mapToDouble(Veiculo::totalArrecadado)
                 .sum();
     }
+
     /**
      * Metodo para calcular o total arrecadado no mes pelo cliente.
      *
@@ -120,7 +134,8 @@ public class Cliente implements IDataToText {
      * Metodo retornar o historico (todos os dados) do cliente pelo mes.
      *
      * @param mes   recebe o mes desejado como parametro.
-     * @param placa recebe a placa para pesquisar qual veiculo do cliente sera referido o relatorio.
+     * @param placa recebe a placa para pesquisar qual veiculo do cliente sera
+     *              referido o relatorio.
      * @return retorna um string builder com o relatorio do cliente.
      */
     public String pesquisarHistorico(int mes, String placa) {
@@ -139,7 +154,8 @@ public class Cliente implements IDataToText {
                 }
             }
             relatorio.append("Total de Uso: ").append(totalDeUsos()).append("\n");
-            relatorio.append("Arrecadado pelo veiculo: ").append(placa).append(" ").append(arrecadadoPorVeiculo(placa)).append("\n");
+            relatorio.append("Arrecadado pelo veiculo: ").append(placa).append(" ").append(arrecadadoPorVeiculo(placa))
+                    .append("\n");
             relatorio.append("Arrecadado Total: ").append(arrecadadoTotal()).append("\n");
         }
 
@@ -148,8 +164,10 @@ public class Cliente implements IDataToText {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
+        if (this == object)
+            return true;
+        if (object == null || getClass() != object.getClass())
+            return false;
         Cliente cliente = (Cliente) object;
         return Objects.equals(id, cliente.id);
     }
