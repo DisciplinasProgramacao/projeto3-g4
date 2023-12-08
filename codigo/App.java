@@ -121,15 +121,17 @@ public class App {
 
             switch (subEscolha) {
                 case 1:
-                    System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
-                    int num = scanner.nextInt();
-
-                    selecionado = num;
-
-                    estacionamento = estacionamentosAletorios.get(num - 1);
+                System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
+                int num = scanner.nextInt();
+            
+                selecionado = num;
+            
+                estacionamento = estacionamentosAletorios.get(num - 1);
+        
                     lerDadosArquivoClientes();
                     lerDadosArquivoVeiculos(scanner);
-                    break;
+
+                break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
                     if (!validaEstacionamento()) {
@@ -242,14 +244,21 @@ public class App {
 
                             try {
                                 Servico servico = Servico.valueOf(opcaoServico);
-                                System.out.println("Serviço de " + servico.getNome() + " contratado!");
                                 estacionamento.estacionar(placa, servico);
+                                System.out.println("Serviço de " + servico.getNome() + " contratado!");
+                                System.out.println("Veículo de placa: " + placa + " estacionado!");
+                            } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                                System.out.println(e.getMessage());
                             } catch (IllegalArgumentException e) {
                                 System.out.println("Serviço inválido. Escolha entre MANOBRISTA, LAVAGEM ou POLIMENTO.");
-                                break; 
                             }
-                        } else if (opcao.trim().equalsIgnoreCase("n")){
-                            estacionamento.estacionar(placa);
+                        } else if (opcao.trim().equalsIgnoreCase("n")) {
+                            try {
+                                estacionamento.estacionar(placa);
+                                System.out.println("Veículo de placa: " + placa + " estacionado!");
+                            } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                                System.out.println(e.getMessage());
+                            }
                         } else {
                             System.out.println("Comando inválido. Digite s ou n.");
                         }
@@ -263,7 +272,7 @@ public class App {
                         scanner.nextLine();
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
-                
+
                         double valorAPagar = 0; // Inicializando com um valor padrão
                         try {
                             valorAPagar = estacionamento.sair(placa);
@@ -278,13 +287,12 @@ public class App {
                             }
                             System.out.println("Cliente " + veiculo.getPlano().getDesc() + " - Valor a ser pago: "
                                     + formatarMoeda(valorAPagar));
-                        } catch (Exception e) {
-                            System.out.println("Ocorreu um erro ao sair do estacionamento: " + e.getMessage());
-                        }
+                                } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                                    System.out.println("Ocorreu um erro ao sair do estacionamento: " + e.getMessage());
+                                }
+        
                     }
                 }
-                
-                
                 case 3 -> System.out.println("Voltando ao menu principal.");
                 default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
@@ -340,14 +348,14 @@ public class App {
                                 System.out.println("Mês inválido. Insira um número de 1 a 12.");
                             }
                         } while (true);
-                
+
                         double totalMes = estacionamento.arrecadacaoNoMes(mesInt);
-                
+
                         System.out.println("O total arrecadado pelo estacionamento no mês " + mesInt);
                         System.out.println("foi de: " + formatarMoeda(totalMes));
                     }
                 }
-                
+
                 case 3 -> {
                     System.out.println("Opção retorno valor médio por uso.");
                     if (!validaEstacionamento()) {
@@ -514,6 +522,11 @@ public class App {
 
             Veiculo veiculo = mapVeiculos.get(placa);
             Vaga vaga = new Vaga(idVaga);
+            
+            if (veiculo == null){
+                System.out.println("Arquivo Vazio, Realize o Cadastro");
+                break;
+            }
 
             TipoCliente plano = veiculo.getPlano();
             plano.setTurno(TURNO.NOITE);

@@ -38,6 +38,8 @@ public class Veiculo implements IDataToText {
             }
             UsoDeVaga uso = usoFactory.get(desc, vaga);
             usos.add(uso);
+        } else {
+            throw new IllegalStateException("Você não pode estacionar duas vezes na mesma vaga!");
         }
     }
 
@@ -53,17 +55,26 @@ public class Veiculo implements IDataToText {
             }
             UsoDeVaga uso = usoFactory.get(desc, vaga, servico);
             usos.add(uso);
+        } else {
+            throw new IllegalStateException("Você não pode estacionar duas vezes na mesma vaga!");
         }
     }
 
     /**
-     * Chama o metodo de sair da classe UsoDeVaga e retorna o valor pago para esse uso.
+     * Chama o metodo de sair da classe UsoDeVaga e retorna o valor pago para esse
+     * uso.
      *
      * @return
      */
     public double sair() {
         int ultimaPosicao = usos.size() - 1;
+        if (ultimaPosicao < 0) {
+            throw new IllegalStateException("Você tem que estacionar o veículo antes de sair!");
+        }
         UsoDeVaga uso = usos.get(ultimaPosicao);
+        if (uso.getSaida() != null) {
+            throw new IllegalStateException("Não e possivel sair duas vezes");
+        }
         return uso.sair();
     }
 
@@ -141,9 +152,12 @@ public class Veiculo implements IDataToText {
     }
 
     public TipoCliente getPlano() {
+        if (tipoCliente == null) {
+            throw new IllegalStateException("Veículo vazio: plano não definido.");
+        }
         return tipoCliente;
     }
-
+    
     public void addUsoDeVaga(UsoDeVaga uso) {
         usos.add(uso);
     }
