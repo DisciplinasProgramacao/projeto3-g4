@@ -8,7 +8,7 @@ public class Veiculo implements IDataToText {
 
     private String placa;
     private List<UsoDeVaga> usos;
-    private TipoCliente tipoCliente;
+    private Planos tipoCliente;
 
     /**
      * Construtor para criar um veículo a partir de sua placa
@@ -128,11 +128,11 @@ public class Veiculo implements IDataToText {
         return builder.toString();
     }
 
-    public void setPlano(TipoCliente tipoCliente) {
+    public void setPlano(Planos tipoCliente) {
         this.tipoCliente = tipoCliente;
     }
 
-    public TipoCliente getPlano() {
+    public Planos getPlano() {
         return tipoCliente;
     }
 

@@ -7,10 +7,10 @@ public class Cliente implements IDataToText {
 
     private String nome;
     private String id;
-    private TipoCliente tipoCliente;
+    private Planos tipoCliente;
     private Map<String, Veiculo> veiculos;
 
-    public Cliente(String nome, String id, TipoCliente tipoCliente) {
+    public Cliente(String nome, String id, Planos tipoCliente) {
         this.nome = nome;
         this.id = id;
         this.tipoCliente = tipoCliente;
@@ -176,7 +176,10 @@ public class Cliente implements IDataToText {
         return builder.toString();
     }
 
-    public TipoCliente getTipoCliente() {
+    public Planos getTipoCliente() {
         return tipoCliente;
+    }
+    public void TrocarPlano(Planos tipoCliente) {
+        this.tipoCliente = tipoCliente;
     }
 }
