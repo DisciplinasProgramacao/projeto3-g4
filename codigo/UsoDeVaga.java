@@ -10,7 +10,9 @@ public abstract class UsoDeVaga {
     protected Vaga vaga;
     protected LocalDateTime entrada;
     protected LocalDateTime saida;
+
     protected double valorPago;
+
     protected Servico servico;
 
     public UsoDeVaga(Vaga vaga) {
@@ -65,12 +67,12 @@ public abstract class UsoDeVaga {
     public String relatorioDeUsoParaVeiculo() {
         StringBuilder relatorio = new StringBuilder();
         relatorio.append(vaga);
-        relatorio.append("\nHorário de entrada: " + entrada);
-        relatorio.append("\nHorário de saida: " + saida);
+        relatorio.append("\nHorário de entrada: " + formatter.format(entrada));
+        relatorio.append("\nHorário de saida: " + formatter.format(saida));
         if (servico != null) {
             relatorio.append("\nServiço de " + servico.getNome() + " contratado: " + formatarMoeda(servico.getValor()));
             relatorio.append("\nValor total: " + formatarMoeda(valorPago() + servico.getValor()));
-        }else{
+        } else {
             relatorio.append("\nValor total: " + formatarMoeda(valorPago()));
         }
         return relatorio.toString();
@@ -78,5 +80,9 @@ public abstract class UsoDeVaga {
 
     private static String formatarMoeda(Double valor) {
         return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(valor);
+    }
+
+    public LocalDateTime getSaida() {
+        return saida;
     }
 }
