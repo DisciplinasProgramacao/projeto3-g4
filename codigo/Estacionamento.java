@@ -106,7 +106,7 @@ public class Estacionamento {
                 .map(cliente -> cliente.possuiVeiculo(placa))
                 .filter(veiculo -> veiculo != null)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new PlacaNaoEncontradaException("Não existe veículo com essa placa!"));
     }
 
     /**

@@ -5,7 +5,15 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
 
 public class App {
     static Estacionamento estacionamento = null;
@@ -24,25 +32,32 @@ public class App {
         int escolha;
 
         do {
-            System.out.println("Selecione uma das opções:");
-            if (validaEstacionamento()) {
-                System.out.println("1 - Cadastrar");
-            } else {
-                System.out.println("1 - Cadastrar (selecione o estacionamento a ser analisado)");
-            }
-            System.out.println("2 - Operações de Veículo");
-            System.out.println("3 - Operações de Estacionamento");
-            System.out.println("4 - Sair");
-            System.out.print("Digite o número da opção desejada: ");
+            try {
+                System.out.println("Selecione uma das opções:");
+                if (validaEstacionamento()) {
+                    System.out.println("1 - Cadastrar");
+                } else {
+                    System.out.println("1 - Cadastrar (selecione o estacionamento a ser analisado)");
+                }
+                System.out.println("2 - Operações de Veículo");
+                System.out.println("3 - Operações de Estacionamento");
+                System.out.println("4 - Sair");
+                System.out.print("Digite o número da opção desejada: ");
 
-            escolha = scanner.nextInt();
+                escolha = scanner.nextInt();
 
-            switch (escolha) {
-                case 1 -> cadastrarSubMenu(scanner);
-                case 2 -> operacoesVeiculoSubMenu(scanner);
-                case 3 -> operacoesEstacionamentoSubMenu(scanner);
-                case 4 -> System.out.println("Saindo do programa.");
-                default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
+                switch (escolha) {
+                    case 1 -> cadastrarSubMenu(scanner);
+                    case 2 -> operacoesVeiculoSubMenu(scanner);
+                    case 3 -> operacoesEstacionamentoSubMenu(scanner);
+                    case 4 -> System.out.println("Saindo do programa.");
+                    default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, insira um número inteiro.");
+                scanner.next();
+                escolha = 0;
             }
         } while (escolha != 4);
 
@@ -65,7 +80,8 @@ public class App {
 
             valor += valorDeCada;
 
-            retorno.append(" O Estacionamento ").append(atual).append(" Arrecadou ").append(formatarMoeda(valorDeCada)).append("\n");
+            retorno.append(" O Estacionamento ").append(atual).append(" Arrecadou ").append(formatarMoeda(valorDeCada))
+                    .append("\n");
 
             atual++;
         }
@@ -105,15 +121,17 @@ public class App {
 
             switch (subEscolha) {
                 case 1:
-                    System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
-                    int num = scanner.nextInt();
-
-                    selecionado = num;
-
-                    estacionamento = estacionamentosAletorios.get(num - 1);
+                System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
+                int num = scanner.nextInt();
+            
+                selecionado = num;
+            
+                estacionamento = estacionamentosAletorios.get(num - 1);
+        
                     lerDadosArquivoClientes();
                     lerDadosArquivoVeiculos(scanner);
-                    break;
+
+                break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
                     if (!validaEstacionamento()) {
@@ -121,11 +139,21 @@ public class App {
                         break;
                     } else {
                         scanner.nextLine();
+
                         System.out.print("Digite o nome do cliente: ");
                         String nome = scanner.nextLine();
 
                         System.out.print("Cliente será de qual tipo(MENSALISTA/HORISTA/DE_TURNO)? ");
-                        TipoCliente tipoCliente = TipoCliente.valueOf(scanner.nextLine().toUpperCase());
+                        TipoCliente tipoCliente = null;
+
+                        try {
+                            tipoCliente = TipoCliente.valueOf(scanner.nextLine().toUpperCase());
+
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(
+                                    "Tipo de cliente inválido. Escolha entre MENSALISTA, HORISTA ou DE_TURNO.");
+                            continue;
+                        }
 
                         Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
 
@@ -180,8 +208,7 @@ public class App {
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                     break;
             }
-        }
-        while (subEscolha != 4);
+        } while (subEscolha != 4);
     }
 
     public static void operacoesVeiculoSubMenu(Scanner scanner) {
@@ -213,12 +240,27 @@ public class App {
 
                         if (opcao.trim().equalsIgnoreCase("s")) {
                             System.out.print("Qual serviço você gostaria de contratar(MANOBRISTA/LAVAGEM/POLIMENTO)? ");
-                            String opcaoServico = scanner.nextLine();
-                            Servico servico = Servico.valueOf(opcaoServico.toUpperCase());
-                            System.out.println("Servico de " + servico.getNome() + " contratado!");
-                            estacionamento.estacionar(placa, servico);
+                            String opcaoServico = scanner.nextLine().toUpperCase();
+
+                            try {
+                                Servico servico = Servico.valueOf(opcaoServico);
+                                estacionamento.estacionar(placa, servico);
+                                System.out.println("Serviço de " + servico.getNome() + " contratado!");
+                                System.out.println("Veículo de placa: " + placa + " estacionado!");
+                            } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                                System.out.println(e.getMessage());
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Serviço inválido. Escolha entre MANOBRISTA, LAVAGEM ou POLIMENTO.");
+                            }
+                        } else if (opcao.trim().equalsIgnoreCase("n")) {
+                            try {
+                                estacionamento.estacionar(placa);
+                                System.out.println("Veículo de placa: " + placa + " estacionado!");
+                            } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                                System.out.println(e.getMessage());
+                            }
                         } else {
-                            estacionamento.estacionar(placa);
+                            System.out.println("Comando inválido. Digite s ou n.");
                         }
                     }
                 }
@@ -231,17 +273,24 @@ public class App {
                         System.out.print("Digite a placa do carro: ");
                         String placa = scanner.nextLine();
 
-                        double valorAPagar = estacionamento.sair(placa);
-                        Veiculo veiculo = mapVeiculos.get(placa);
-                        DAOVeiculo daoVeiculo = new DAOVeiculo("veiculos.txt");
+                        double valorAPagar = 0; // Inicializando com um valor padrão
                         try {
-                            daoVeiculo.abrirEscrita();
-                            daoVeiculo.add(veiculo);
-                            daoVeiculo.fechar();
-                        } catch (IOException e) {
-                            System.out.println(e.getMessage());
-                        }
-                        System.out.println("Cliente " + veiculo.getPlano().getDesc() + " - Valor a ser pago: " + formatarMoeda(valorAPagar));
+                            valorAPagar = estacionamento.sair(placa);
+                            Veiculo veiculo = mapVeiculos.get(placa);
+                            DAOVeiculo daoVeiculo = new DAOVeiculo("veiculos.txt");
+                            try {
+                                daoVeiculo.abrirEscrita();
+                                daoVeiculo.add(veiculo);
+                                daoVeiculo.fechar();
+                            } catch (IOException e) {
+                                System.out.println(e.getMessage());
+                            }
+                            System.out.println("Cliente " + veiculo.getPlano().getDesc() + " - Valor a ser pago: "
+                                    + formatarMoeda(valorAPagar));
+                                } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                                    System.out.println("Ocorreu um erro ao sair do estacionamento: " + e.getMessage());
+                                }
+        
                     }
                 }
                 case 3 -> System.out.println("Voltando ao menu principal.");
@@ -285,15 +334,28 @@ public class App {
                         System.out.println("Estacionamento não selecionado.");
                     } else {
                         scanner.nextLine();
-                        System.out.print("Qual mês você deseja conferir: ");
-                        String mes = scanner.nextLine();
+                        int mesInt;
+                        do {
+                            System.out.print("Qual mês você deseja conferir (1 a 12): ");
+                            String mes = scanner.nextLine();
+                            try {
+                                mesInt = Integer.parseInt(mes);
+                                if (mesInt < 1 || mesInt > 12) {
+                                    throw new NumberFormatException();
+                                }
+                                break;
+                            } catch (NumberFormatException e) {
+                                System.out.println("Mês inválido. Insira um número de 1 a 12.");
+                            }
+                        } while (true);
 
-                        double totalMes = estacionamento.arrecadacaoNoMes(Integer.parseInt(mes));
+                        double totalMes = estacionamento.arrecadacaoNoMes(mesInt);
 
-                        System.out.println("O total arrecadado pelo estacionamento no mês " + mes);
+                        System.out.println("O total arrecadado pelo estacionamento no mês " + mesInt);
                         System.out.println("foi de: " + formatarMoeda(totalMes));
                     }
                 }
+
                 case 3 -> {
                     System.out.println("Opção retorno valor médio por uso.");
                     if (!validaEstacionamento()) {
@@ -330,7 +392,8 @@ public class App {
 
                         int usos = usoMensalistasMes(mes);
 
-                        System.out.println("Em média, os mensalistas utilizaram o estacionamento " + usos + " vezes no mês " + mes);
+                        System.out.println("Em média, os mensalistas utilizaram o estacionamento " + usos
+                                + " vezes no mês " + mes);
                     }
                 }
                 case 7 -> {
@@ -342,7 +405,8 @@ public class App {
 
                         double arrecadado = arrecadacaoMediaHoristas(mes);
 
-                        System.out.println("Em média, a arrecadação média dos horistas no mês " + mes + " foi de " + formatarMoeda(arrecadado));
+                        System.out.println("Em média, a arrecadação média dos horistas no mês " + mes + " foi de "
+                                + formatarMoeda(arrecadado));
                     }
                 }
                 case 8 -> System.out.println("Voltando ao menu principal.");
@@ -458,6 +522,11 @@ public class App {
 
             Veiculo veiculo = mapVeiculos.get(placa);
             Vaga vaga = new Vaga(idVaga);
+            
+            if (veiculo == null){
+                System.out.println("Arquivo Vazio, Realize o Cadastro");
+                break;
+            }
 
             TipoCliente plano = veiculo.getPlano();
             plano.setTurno(TURNO.NOITE);

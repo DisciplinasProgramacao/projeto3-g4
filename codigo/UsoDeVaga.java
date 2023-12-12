@@ -59,4 +59,8 @@ public abstract class UsoDeVaga {
     public String toString() {
         return vaga.getIdVaga() + ";" + entrada.format(formatter) + ";" + saida.format(formatter) + ";" + valorPago + ";" + servico + ";";
     }
+
+    public Object getSaida() {
+        return saida;
+    }
 }
