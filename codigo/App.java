@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -222,6 +223,7 @@ public class App {
             System.out.println("1 - Estacionar Veículo");
             System.out.println("2 - Sair da Vaga com Veículo");
             System.out.println("3 - Voltar ao menu principal");
+            System.out.println("4 - Relatorio de usos de vaga do veiculo");
             System.out.print("Digite o número da opção desejada: ");
             subEscolha = scanner.nextInt();
 
@@ -294,6 +296,16 @@ public class App {
                     }
                 }
                 case 3 -> System.out.println("Voltando ao menu principal.");
+                case 4 -> {
+                    System.out.print("Qual a placa do veiculo? ");
+                    String placa = scanner.next();
+                    try {
+                        Veiculo veiculo = mapVeiculos.get(placa);
+                        System.out.println(veiculo.relatorioUsosDeVagaVeiculo());
+                    } catch (NullPointerException e) {
+                        System.out.println("Nenhum veículo com essa placa!");
+                    }
+                }
                 default -> System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
         } while (subEscolha != 3);
