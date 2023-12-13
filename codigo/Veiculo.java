@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class Veiculo implements IDataToText {
         String desc = "";
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
-            switch (tipoCliente) {
+            switch ((TipoCliente) tipoCliente) {
                 case HORISTA -> desc = "horista";
                 case MENSALISTA -> desc = "mensalista";
                 case DE_TURNO -> desc = "turno" + tipoCliente.getTurno().name();
@@ -48,7 +49,7 @@ public class Veiculo implements IDataToText {
         String desc = "";
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
-            switch (tipoCliente) {
+            switch ((TipoCliente) tipoCliente) {
                 case HORISTA -> desc = "horista";
                 case MENSALISTA -> desc = "mensalista";
                 case DE_TURNO -> desc = "turno" + tipoCliente.getTurno().name();
@@ -133,6 +134,7 @@ public class Veiculo implements IDataToText {
         relatorio.append("\n         RELATORIO DE USOS DE VAGA\n");
         relatorio.append("-------------------------------------------");
         relatorio.append("\nVeiculo de placa: " + placa + "\n");
+        relatorio.append("Plano do Cliente: " + tipoCliente.getDesc() + "\n");
         relatorio.append("-------------------------------------------\n");
         usos.stream()
                 .sorted(Comparator.comparingDouble(u -> u.valorPago()))

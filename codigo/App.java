@@ -122,17 +122,17 @@ public class App {
 
             switch (subEscolha) {
                 case 1:
-                System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
-                int num = scanner.nextInt();
-            
-                selecionado = num;
-            
-                estacionamento = estacionamentosAletorios.get(num - 1);
-        
+                    System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
+                    int num = scanner.nextInt();
+
+                    selecionado = num;
+
+                    estacionamento = estacionamentosAletorios.get(num - 1);
+
                     lerDadosArquivoClientes();
                     lerDadosArquivoVeiculos(scanner);
 
-                break;
+                    break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
                     if (!validaEstacionamento()) {
@@ -289,10 +289,10 @@ public class App {
                             }
                             System.out.println("Cliente " + veiculo.getPlano().getDesc() + " - Valor a ser pago: "
                                     + formatarMoeda(valorAPagar));
-                                } catch (IllegalStateException | PlacaNaoEncontradaException e) {
-                                    System.out.println("Ocorreu um erro ao sair do estacionamento: " + e.getMessage());
-                                }
-        
+                        } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                            System.out.println("Ocorreu um erro ao sair do estacionamento: " + e.getMessage());
+                        }
+
                     }
                 }
                 case 3 -> System.out.println("Voltando ao menu principal.");
@@ -534,17 +534,18 @@ public class App {
 
             Veiculo veiculo = mapVeiculos.get(placa);
             Vaga vaga = new Vaga(idVaga);
-            
-            if (veiculo == null){
+
+            if (veiculo == null) {
                 System.out.println("Arquivo Vazio, Realize o Cadastro");
                 break;
             }
 
-            TipoCliente plano = veiculo.getPlano();
+            TipoCliente plano = (TipoCliente) veiculo.getPlano();
             plano.setTurno(TURNO.NOITE);
 
             UsoFactory usoFactory = new UsoFactory();
             String desc = "";
+
             switch (plano) {
                 case HORISTA -> desc = "horista";
                 case MENSALISTA -> desc = "mensalista";

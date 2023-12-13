@@ -1,6 +1,7 @@
 public interface Planos {
 
-  public double getMensalidade();
-  public String getDesc();
-
+  double getMensalidade();
+  String getDesc();
+  TURNO getTurno();
+  void setTurno(TURNO turno);
 }
