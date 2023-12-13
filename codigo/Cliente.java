@@ -181,7 +181,7 @@ public class Cliente implements IDataToText {
 
     /**
      * Método equals que analisa se um cliente é iogual a outro
-     * @param objeto cliente
+     * @param object cliente
      * @return true se o cliente é igual ao outro, false se o cliente for diferente.
      */
     @Override
