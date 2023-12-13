@@ -41,6 +41,11 @@ public class Estacionamento {
         clientes.put(cliente.getId(), cliente);
     }
 
+    /**
+     * Método que adiciona um cliente de turno ao estacionamento
+     * @param cliente
+     * @param turno
+     */
     public void addCliente(Cliente cliente, TURNO turno) {
         clientes.put(cliente.getId(), cliente);
     }

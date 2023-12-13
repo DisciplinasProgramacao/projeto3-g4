@@ -162,6 +162,11 @@ public class Cliente implements IDataToText {
         return relatorio.toString();
     }
 
+    /**
+     * Método equals que analisa se um cliente é iogual a outro
+     * @param objeto cliente
+     * @return true se o cliente é igual ao outro, false se o cliente for diferente.
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object)
@@ -200,6 +205,10 @@ public class Cliente implements IDataToText {
     public Planos getTipoCliente() {
         return tipoCliente;
     }
+    /**
+     * Método que troca o tipo do cliente
+     * @param tipoCliente
+     */
     public void TrocarPlano(Planos tipoCliente) {
         this.tipoCliente = tipoCliente;
     }
