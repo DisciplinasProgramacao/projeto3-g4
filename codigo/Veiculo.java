@@ -10,6 +10,7 @@ public class Veiculo implements IDataToText {
     private String placa;
     private List<UsoDeVaga> usos;
     private Planos tipoCliente;
+    private UsoFactory usoFactory = new UsoFactory();
 
     /**
      * Construtor para criar um veículo a partir de sua placa
@@ -28,7 +29,6 @@ public class Veiculo implements IDataToText {
      * @param vaga
      */
     public void estacionar(Vaga vaga) {
-        UsoFactory usoFactory = new UsoFactory();
         String desc = "";
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
@@ -45,7 +45,6 @@ public class Veiculo implements IDataToText {
     }
 
     public void estacionar(Vaga vaga, Servico servico) {
-        UsoFactory usoFactory = new UsoFactory();
         String desc = "";
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
