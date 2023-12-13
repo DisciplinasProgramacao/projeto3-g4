@@ -1,8 +1,9 @@
-public enum TipoCliente{
+public enum TipoCliente implements Planos{
     HORISTA("horista", 0),
     DE_TURNO("De Turno", 200),
     MENSALISTA("Mensalista", 500);
 
+    
     private final String desc;
     private final double mensalidade;
     private TURNO turno;
@@ -12,13 +13,6 @@ public enum TipoCliente{
         this.mensalidade = mensalidade;
     }
 
-    public double getMensalidade(){
-        return mensalidade;
-    }
-
-    public String getDesc(){
-        return desc;
-    }
 
     public void setTurno(TURNO turno) {
         this.turno = turno;
@@ -26,5 +20,16 @@ public enum TipoCliente{
 
     public TURNO getTurno() {
         return turno;
+    }
+
+    
+    @Override
+    public double getMensalidade() {
+    return mensalidade;
+    }
+
+    @Override
+    public String getDesc() {
+    return desc;
     }
 }
