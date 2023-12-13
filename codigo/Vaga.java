@@ -5,11 +5,20 @@ public class Vaga {
 	private static int numeroSequencial = 1;
 	private static char letraSequencial = 'A';
 
+	/**
+     * Construtor classe Vaga
+     * @param idVaga O identificador único da vaga.
+     */
 	public Vaga(String idVaga) {
 		this.idVaga = idVaga;
 		this.disponivel = true;
 	}
 
+	/**
+     * Construtor classe Vaga
+     * @param fila O número da fila (A-Z).
+     * @param numero O número da vaga.
+     */
 	public Vaga(int fila, int numero) {
 
 		if (fila >= 0 && fila < 26) {
@@ -45,7 +54,6 @@ public class Vaga {
 	 * Método para informar se uma vaga está vazia ou não
 	 * @return verdadeiro para vazia, e retorna falso para ocupada.
 	 */
-
 	public boolean disponivel() {
 		return disponivel;
 	}

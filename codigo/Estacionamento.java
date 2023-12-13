@@ -14,6 +14,12 @@ public class Estacionamento {
     private int quantFileiras;
     private int vagasPorFileira;
 
+    /**
+     * Construtor classe estacionamento
+     * @param nome nome do estacionamento
+     * @param fileiras quantidade de fileiras
+     * @param vagasPorFila quantas vagaspor fila
+     */
     public Estacionamento(String nome, int fileiras, int vagasPorFila) {
         this.nome = nome;
         this.quantFileiras = fileiras;

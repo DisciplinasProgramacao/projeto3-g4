@@ -10,6 +10,12 @@ public class Cliente implements IDataToText {
     private Planos tipoCliente;
     private Map<String, Veiculo> veiculos;
 
+    /**
+     * Construtor classe Cliente
+     * @param nome nome do cliente
+     * @param id id do cliente
+     * @param tipoCliente tipo do cliente
+     */
     public Cliente(String nome, String id, Planos tipoCliente) {
         this.nome = nome;
         this.id = id;
@@ -17,6 +23,11 @@ public class Cliente implements IDataToText {
         this.veiculos = new HashMap<>(10);
     }
 
+    /**
+     * Constutor classe Cliente
+     * @param nome nome do cliente
+     * @param id id do cliente
+     */
     public Cliente(String nome, String id) {
         this.nome = nome;
         this.id = id;
@@ -183,6 +194,9 @@ public class Cliente implements IDataToText {
         return Objects.equals(id, cliente.id);
     }
 
+    /**
+     *  Retorna um valor hash baseado no id do cliente.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -197,6 +211,10 @@ public class Cliente implements IDataToText {
         return "Nome: " + nome + " - Id: " + id;
     }
 
+    /**
+     * Metodo responsavel por converter os dados em uma String formatada
+     * incluindo id, nome, tipoCliente e veiculos formatados
+     */
     @Override
     public String dataToText() {
         return id + ";" + nome + ";" + tipoCliente + ";" + formatVeiculos();
@@ -212,9 +230,14 @@ public class Cliente implements IDataToText {
         return builder.toString();
     }
 
+    /**
+     * Metodo responsavel por obter o tipo do cliente associado a instancia da classe Planos
+     * @return o tipo do cliente
+     */
     public Planos getTipoCliente() {
         return tipoCliente;
     }
+
     /**
      * Método que troca o tipo do cliente
      * @param tipoCliente

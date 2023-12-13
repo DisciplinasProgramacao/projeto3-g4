@@ -6,18 +6,36 @@ public class UsoHorista extends UsoDeVaga {
     private static final double VALOR_FRACAO = 4.0;
     private static final double VALOR_MAXIMO = 50.0;
 
+    /**
+     * Construtor classe usoHorista
+     * @param vaga A vaga utilizada
+     */
     public UsoHorista(Vaga vaga) {
         super(vaga);
     }
 
+    /**
+     * Construtor classe usoHorista
+     * @param vaga A vaga utilizada
+     * @param servico O serviço contratado
+     */
     public UsoHorista(Vaga vaga, Servico servico) {
         super(vaga, servico);
         contratarServico(servico);
     }
 
+    /**
+     * Construtor classe UsoHorista
+     * @param vaga A vaga utilizada
+     * @param entrada Data e hora de entrada
+     * @param saida Data e hora de saída
+     * @param valorPago Valor pago pelo uso horista
+     * @param servico O serviço contratado
+     */
     public UsoHorista(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico) {
         super(vaga, entrada, saida, valorPago, servico);
     }
+
       /**
      * Método que calcula o valor para um uso de turno. 
      * @return Valor a ser pago.

@@ -15,17 +15,34 @@ public abstract class UsoDeVaga {
 
     protected Servico servico;
 
+    /**
+     * Construtor classe UseDeVaga
+     * @param vaga A vaga utilizada
+     */
     public UsoDeVaga(Vaga vaga) {
         this.vaga = vaga;
         this.entrada = LocalDateTime.now();
     }
 
+    /**
+     * Construtor classe UsoDeVaga
+     * @param vaga A vaga utilizada
+     * @param servico O serviço contratado
+     */
     public UsoDeVaga(Vaga vaga, Servico servico) {
         this.vaga = vaga;
         this.entrada = LocalDateTime.now();
         contratarServico(servico);
     }
 
+    /**
+     * Construtor para classe UsoDeVaga
+     * @param vaga A vaga utilizada
+     * @param entrada Data e hora de entrada
+     * @param saida Data e hora de saída
+     * @param valorPago Valor pago pelo uso da vaga
+     * @param servico O serviço contratado
+     */
     public UsoDeVaga(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago, Servico servico) {
         this.vaga = vaga;
         this.entrada = entrada;
@@ -33,6 +50,7 @@ public abstract class UsoDeVaga {
         this.valorPago = valorPago;
         this.servico = servico;
     }
+
     /**
      * Método para que um uso de vaga seja acabado e o cliente saia
      * @return valor a ser pago pelo uso.
@@ -51,13 +69,25 @@ public abstract class UsoDeVaga {
         return valorPago();
     }
 
-
+    /**
+     * Verifica se o uso da vaga ocorreu no mes especificado.
+     * @param mes desejado
+     * @return true se o uso foi no mes especificado, false caso contrário.
+     */
     public boolean ehDoMes(int mes) {
         return entrada.getMonthValue() == mes;
     }
 
+    /**
+     * Metodo abstrato para calcular o valor a ser pago pelo uso da vaga.
+     * @return valor a ser pago
+     */
     public abstract double valorPago();
 
+    /**
+     * Contrata um serviço para o uso da vaga.
+     * @param servico a ser contratado.
+     */
     public void contratarServico(Servico servico) {
         this.servico = servico;
     }
@@ -67,6 +97,10 @@ public abstract class UsoDeVaga {
         return vaga.getIdVaga() + ";" + entrada.format(formatter) + ";" + saida.format(formatter) + ";" + valorPago + ";" + servico + ";";
     }
 
+    /**
+     * Gera um relatório detalhado do uso da vaga para um veículo.
+     * @return Uma string contendo o relatório.
+     */
     public String relatorioDeUsoParaVeiculo() {
         StringBuilder relatorio = new StringBuilder();
         relatorio.append(vaga);
@@ -81,6 +115,11 @@ public abstract class UsoDeVaga {
         return relatorio.toString();
     }
 
+    /**
+     * Metodo responsavel por formatar um valor em real
+     * @param valor a ser formatado
+     * @return String com o valor formatado em real
+     */
     private static String formatarMoeda(Double valor) {
         return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(valor);
     }

@@ -15,7 +15,7 @@ public class Veiculo implements IDataToText {
     /**
      * Construtor para criar um veículo a partir de sua placa
      *
-     * @param placa
+     * @param placa do veiculo
      */
     public Veiculo(String placa) {
         this.placa = placa;
@@ -128,6 +128,7 @@ public class Veiculo implements IDataToText {
 
         return qtdUsos;
     }
+
     /**
     * Método que imprime um relatório sobre usos de vaga de um veículo
     * @return relaótrio de usos
@@ -174,6 +175,7 @@ public class Veiculo implements IDataToText {
         }
         return tipoCliente;
     }
+
   /**
    * Método que adiciona um uso de vaga a um veículo
    * @param uso
