@@ -110,6 +110,12 @@ public class Cliente implements IDataToText {
         return valor;
     }
 
+    /**
+     * Metodo para calcular o total arrecadado por todos os veiculos de um cliente
+     * considerando apenas usos de vaga.
+     *
+     * @return retorna o total arrecadado pelo cliente, de todos os veiculos em usos de vagas.
+     */
     public double arrecadadoTotalDeUsos() {
         return veiculos.values().stream()
                 .mapToDouble(Veiculo::totalArrecadado)
@@ -196,6 +202,10 @@ public class Cliente implements IDataToText {
         return id + ";" + nome + ";" + tipoCliente + ";" + formatVeiculos();
     }
 
+    /**
+     * Formata as informacoes do veiculo e seus usos para salvar no arquivo
+     * @return
+     */
     private String formatVeiculos() {
         StringBuilder builder = new StringBuilder();
         veiculos.values().forEach(v -> builder.append(v.getPlaca()).append(";"));

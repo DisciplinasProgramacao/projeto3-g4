@@ -79,6 +79,12 @@ public class Estacionamento {
         return false;
     }
 
+    /**
+     * Esse método recebe um veiculo que deseja estecionar e um servico contratado
+     * e caso tenha vagas disponíveis estaciona o veiculo na vaga em questão;
+     *
+     * @param placa String da placa do veículo que deseja estacionar em questão;
+     */
     public boolean estacionar(String placa, Servico servico) {
         Veiculo veiculo = procuraVeiculo(placa);
         Vaga vaga = procuraVaga();

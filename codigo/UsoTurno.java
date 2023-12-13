@@ -39,7 +39,7 @@ public class UsoTurno extends UsoDeVaga {
         }
     }
     /**
-     * Métofo que retorna se o uso está sendo feito no turno correto
+     * Método que retorna se o uso está sendo feito no turno correto
      * @param momento hora do uso
      * @return false para fora do turno e true para dentro do turno.
      */

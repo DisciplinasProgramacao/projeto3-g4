@@ -32,6 +32,7 @@ public class Veiculo implements IDataToText {
         String desc = "";
         if (vaga.disponivel()) {
             vaga.setDisponivel(false);
+            desc = tipoCliente.getDesc();
             switch ((TipoCliente) tipoCliente) {
                 case HORISTA -> desc = "horista";
                 case MENSALISTA -> desc = "mensalista";
