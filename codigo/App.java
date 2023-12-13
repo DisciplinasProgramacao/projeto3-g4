@@ -537,8 +537,8 @@ public class App {
 
                 Vaga vaga = new Vaga(idVaga);
 
-            TipoCliente plano = (TipoCliente) veiculo.getPlano();
-            plano.setTurno(TURNO.NOITE);
+                TipoCliente plano = (TipoCliente) veiculo.getPlano();
+                plano.setTurno(TURNO.NOITE);
 
                 UsoFactory usoFactory = new UsoFactory();
                 String desc = "";
