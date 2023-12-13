@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -122,17 +121,17 @@ public class App {
 
             switch (subEscolha) {
                 case 1:
-                System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
-                int num = scanner.nextInt();
-            
-                selecionado = num;
-            
-                estacionamento = estacionamentosAletorios.get(num - 1);
-        
+                    System.out.print("Em qual estacionamento você deseja realizar operações(1, 2 ou 3)? ");
+                    int num = scanner.nextInt();
+
+                    selecionado = num;
+
+                    estacionamento = estacionamentosAletorios.get(num - 1);
+
                     lerDadosArquivoClientes();
                     lerDadosArquivoVeiculos(scanner);
 
-                break;
+                    break;
                 case 2:
                     System.out.println("Opção Cadastrar Cliente selecionada.");
                     if (!validaEstacionamento()) {
@@ -187,18 +186,20 @@ public class App {
                         String placa = scanner.nextLine();
 
                         Veiculo veiculo = new Veiculo(placa);
-
-                        Cliente cliente = mapClientes.get(id);
-                        mapVeiculos.put(placa, veiculo);
-                        estacionamento.addVeiculo(veiculo, cliente);
-
-                        DAOCliente daoCliente = new DAOCliente("clientes.txt");
                         try {
+                            Cliente cliente = mapClientes.get(id);
+                            mapVeiculos.put(placa, veiculo);
+                            estacionamento.addVeiculo(veiculo, cliente);
+
+                            DAOCliente daoCliente = new DAOCliente("clientes.txt");
+
                             daoCliente.abrirEscrita();
                             daoCliente.add(cliente);
                             daoCliente.fechar();
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
+                        } catch (NullPointerException e) {
+                            System.out.println("Não foi possível cadastrar veículo sem clientes cadastrados.");
                         }
                     }
                     break;
@@ -289,10 +290,10 @@ public class App {
                             }
                             System.out.println("Cliente " + veiculo.getPlano().getDesc() + " - Valor a ser pago: "
                                     + formatarMoeda(valorAPagar));
-                                } catch (IllegalStateException | PlacaNaoEncontradaException e) {
-                                    System.out.println("Ocorreu um erro ao sair do estacionamento: " + e.getMessage());
-                                }
-        
+                        } catch (IllegalStateException | PlacaNaoEncontradaException e) {
+                            System.out.println("Ocorreu um erro ao sair do estacionamento: " + e.getMessage());
+                        }
+
                     }
                 }
                 case 3 -> System.out.println("Voltando ao menu principal.");
@@ -531,29 +532,33 @@ public class App {
             String servicoStr = fields[iArq];
             Servico servico = servicoStr.equals("null") ? null : Servico.valueOf(servicoStr.toUpperCase());
             iArq++;
+            try {
+                Veiculo veiculo = mapVeiculos.get(placa);
 
-            Veiculo veiculo = mapVeiculos.get(placa);
-            Vaga vaga = new Vaga(idVaga);
-            
-            if (veiculo == null){
-                System.out.println("Arquivo Vazio, Realize o Cadastro");
-                break;
+                Vaga vaga = new Vaga(idVaga);
+
+                // if (veiculo == null){
+                // System.out.println("Arquivo Vazio, Realize o Cadastro");
+                // break;
+                // }
+
+                TipoCliente plano = veiculo.getPlano();
+                plano.setTurno(TURNO.NOITE);
+
+                UsoFactory usoFactory = new UsoFactory();
+                String desc = "";
+                switch (plano) {
+                    case HORISTA -> desc = "horista";
+                    case MENSALISTA -> desc = "mensalista";
+                    case DE_TURNO -> desc = "turno" + plano.getTurno().name();
+                }
+                UsoDeVaga uso = usoFactory.get(desc, vaga, entrada, saida, valorPago, servico);
+                veiculo.addUsoDeVaga(uso);
+
+                mapVeiculos.put(placa, veiculo);
+            } catch (NullPointerException e) {
+                System.out.println("Nenhum veículo com essa placa!");
             }
-
-            TipoCliente plano = veiculo.getPlano();
-            plano.setTurno(TURNO.NOITE);
-
-            UsoFactory usoFactory = new UsoFactory();
-            String desc = "";
-            switch (plano) {
-                case HORISTA -> desc = "horista";
-                case MENSALISTA -> desc = "mensalista";
-                case DE_TURNO -> desc = "turno" + plano.getTurno().name();
-            }
-            UsoDeVaga uso = usoFactory.get(desc, vaga, entrada, saida, valorPago, servico);
-            veiculo.addUsoDeVaga(uso);
-
-            mapVeiculos.put(placa, veiculo);
         }
     }
 
