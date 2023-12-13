@@ -1,6 +1,5 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -64,8 +63,8 @@ public class EstacionamentoTest {
     }
 
     @Test
-    public void naoDeveriaEstacionarVeiculoNaoCadastrado() {
-        assertFalse(estacionamento.estacionar("1111111"));
+    public void deveriaLancarExcessãoAoEstacionarVeiculoNaoCadastrado() {
+        assertThrows(PlacaNaoEncontradaException.class, () -> estacionamento.estacionar("11111111"));
     }
 
     @Test
