@@ -20,7 +20,10 @@ public class UsoTurno extends UsoDeVaga {
         super(vaga, entrada, saida, valorPago, servico);
         this.horista = new UsoHorista(vaga, entrada, saida, valorPago, servico);
     }
-
+    /**
+     * Método que calcula o valor para um uso de turno. 
+     * @return Valor a ser pago.
+     */
     @Override
     public double valorPago() {
         LocalTime horaAtual = LocalTime.now();
@@ -35,7 +38,11 @@ public class UsoTurno extends UsoDeVaga {
             }
         }
     }
-
+    /**
+     * Métofo que retorna se o uso está sendo feito no turno correto
+     * @param momento hora do uso
+     * @return false para fora do turno e true para dentro do turno.
+     */
     public boolean ehDoTurno(LocalTime momento) {
         boolean dentroDoTurno = false;
 

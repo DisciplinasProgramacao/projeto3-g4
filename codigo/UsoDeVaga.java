@@ -33,7 +33,10 @@ public abstract class UsoDeVaga {
         this.valorPago = valorPago;
         this.servico = servico;
     }
-
+    /**
+     * Método para que um uso de vaga seja acabado e o cliente saia
+     * @return valor a ser pago pelo uso.
+     */
     public double sair() {
         vaga.setDisponivel(true);
         this.saida = LocalDateTime.now();

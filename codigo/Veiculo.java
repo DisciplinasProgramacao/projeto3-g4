@@ -127,7 +127,10 @@ public class Veiculo implements IDataToText {
 
         return qtdUsos;
     }
-
+    /**
+    * Método que imprime um relatório sobre usos de vaga de um veículo
+    * @return relaótrio de usos
+    */
     public String relatorioUsosDeVagaVeiculo() {
         StringBuilder relatorio = new StringBuilder();
         relatorio.append("\n         RELATORIO DE USOS DE VAGA\n");
@@ -170,7 +173,10 @@ public class Veiculo implements IDataToText {
         }
         return tipoCliente;
     }
-
+  /**
+   * Método que adiciona um uso de vaga a um veículo
+   * @param uso
+   */
     public void addUsoDeVaga(UsoDeVaga uso) {
         usos.add(uso);
     }
