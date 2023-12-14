@@ -227,7 +227,7 @@ public class Estacionamento {
 
         for (int i = 0; i < maxClientes; i++) {
             Cliente cliente = clienteDoMes.get(i);
-            top5.append(cliente + "\n");
+            top5.append(cliente.gastoNoMesDoClienteFormatado(mes) + "\n");
         }
         return top5.toString();
     }

@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,9 @@ public class Cliente implements IDataToText {
 
     /**
      * Construtor classe Cliente
-     * @param nome nome do cliente
-     * @param id id do cliente
+     *
+     * @param nome        nome do cliente
+     * @param id          id do cliente
      * @param tipoCliente tipo do cliente
      */
     public Cliente(String nome, String id, Planos tipoCliente) {
@@ -25,8 +27,9 @@ public class Cliente implements IDataToText {
 
     /**
      * Constutor classe Cliente
+     *
      * @param nome nome do cliente
-     * @param id id do cliente
+     * @param id   id do cliente
      */
     public Cliente(String nome, String id) {
         this.nome = nome;
@@ -60,7 +63,7 @@ public class Cliente implements IDataToText {
      * @param placa Recebe placa como parâmetro para procurar, com o metodo equals,
      *              na lista de veiculos para ver se ele pertence ao cliente.
      * @return retorna o veículo se o cliente possuir o carro, caso contrário
-     *         retorna null.
+     * retorna null.
      */
     public Veiculo possuiVeiculo(String placa) {
         return veiculos.get(placa);
@@ -82,7 +85,7 @@ public class Cliente implements IDataToText {
      * específico.
      *
      * @return retorna o total de usos de todos os veiculos do cliente em um mês
-     *         específico.
+     * específico.
      */
     public int totalDeUsosMes(int mes, TipoCliente tipo) {
         int qtdUsos = 0;
@@ -92,7 +95,9 @@ public class Cliente implements IDataToText {
                     .sum();
         }
         return qtdUsos;
-    };
+    }
+
+    ;
 
     /**
      * Metodo para calcular o total arrecadado pelo veiculo do cliente, cujo a placa
@@ -101,7 +106,7 @@ public class Cliente implements IDataToText {
      * @param placa recebe a placa como parametro para decidir qual veiculo sera
      *              pesquisado do cliente.
      * @return retorna o total arrecadado por veiculo (pesquisado pela placa) do
-     *         cliente.
+     * cliente.
      */
     public double arrecadadoPorVeiculo(String placa) {
         Veiculo veiculo = veiculos.get(placa);
@@ -181,6 +186,7 @@ public class Cliente implements IDataToText {
 
     /**
      * Método equals que analisa se um cliente é iogual a outro
+     *
      * @param object cliente
      * @return true se o cliente é igual ao outro, false se o cliente for diferente.
      */
@@ -195,7 +201,7 @@ public class Cliente implements IDataToText {
     }
 
     /**
-     *  Retorna um valor hash baseado no id do cliente.
+     * Retorna um valor hash baseado no id do cliente.
      */
     @Override
     public int hashCode() {
@@ -212,6 +218,15 @@ public class Cliente implements IDataToText {
     }
 
     /**
+     * Retorna o gasto total no mes do cliente formatado com seu id e nome.
+     * @param mes
+     * @return String
+     */
+    public String gastoNoMesDoClienteFormatado(int mes) {
+        return "Id: " + id + " - Nome: " + nome + " - Valor gasto no mês " + mes + " : R$ " + gastoNoMes(mes);
+    }
+
+    /**
      * Metodo responsavel por converter os dados em uma String formatada
      * incluindo id, nome, tipoCliente e veiculos formatados
      */
@@ -222,6 +237,7 @@ public class Cliente implements IDataToText {
 
     /**
      * Formata as informacoes do veiculo e seus usos para salvar no arquivo
+     *
      * @return
      */
     private String formatVeiculos() {
@@ -232,6 +248,7 @@ public class Cliente implements IDataToText {
 
     /**
      * Metodo responsavel por obter o tipo do cliente associado a instancia da classe Planos
+     *
      * @return o tipo do cliente
      */
     public Planos getTipoCliente() {
@@ -240,9 +257,11 @@ public class Cliente implements IDataToText {
 
     /**
      * Método que troca o tipo do cliente
+     *
      * @param tipoCliente
      */
     public void TrocarPlano(Planos tipoCliente) {
         this.tipoCliente = tipoCliente;
+        veiculos.values().forEach(v -> v.setPlano(tipoCliente));
     }
 }

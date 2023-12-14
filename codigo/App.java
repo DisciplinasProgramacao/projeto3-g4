@@ -91,19 +91,16 @@ public class App {
         return retorno;
     }
 
-    ;
 
     public static int usoMensalistasMes(int mes) {
         return estacionamento.quantidadeUsosMes(mes, TipoCliente.MENSALISTA);
     }
 
-    ;
 
     public static double arrecadacaoMediaHoristas(int mes) {
         return estacionamento.arrecadacaoNoMesPorTipo(mes, TipoCliente.HORISTA);
     }
 
-    ;
 
     public static void cadastrarSubMenu(Scanner scanner) throws FileNotFoundException {
         int subEscolha;
@@ -115,7 +112,8 @@ public class App {
             System.out.println("1 - Selecionar Estacionamento");
             System.out.println("2 - Cadastrar Cliente");
             System.out.println("3 - Cadastrar Veículo");
-            System.out.println("4 - Voltar ao menu principal");
+            System.out.println("4 - Alterar Plano do Cliente");
+            System.out.println("5 - Voltar ao menu principal");
             System.out.print("Digite o número da opção desejada: ");
             subEscolha = scanner.nextInt();
 
@@ -156,12 +154,15 @@ public class App {
                         }
 
                         Cliente cliente = new Cliente(nome, String.valueOf(idClientes), tipoCliente);
-
-                        if (tipoCliente == TipoCliente.DE_TURNO) {
-                            System.out.print("Qual turno você gostaria de escolher(manhã, tarde ou noite)? ");
-                            TURNO turno = TURNO.valueOf(scanner.next().toUpperCase());
-                            System.out.println("Turno " + turno + " escolhido!");
-                            tipoCliente.setTurno(turno);
+                        try {
+                            if (tipoCliente == TipoCliente.DE_TURNO) {
+                                System.out.print("Qual turno você gostaria de escolher(manha, tarde ou noite)? ");
+                                TURNO turno = TURNO.valueOf(scanner.next().toUpperCase());
+                                System.out.println("Turno " + turno + " escolhido!");
+                                tipoCliente.setTurno(turno);
+                            }
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Turno inválido. Turnos disponiveis: manha, tarde ou noite.");
                         }
 
                         estacionamento.addCliente(cliente);
@@ -204,13 +205,31 @@ public class App {
                     }
                     break;
                 case 4:
+                    System.out.println("Opção Alterar Plano selecionada.");
+                    try {
+                        System.out.print("Qual o id do cliente? ");
+                        Cliente cliente = mapClientes.get(scanner.next());
+                        System.out.print("Gostaria de mudar para qual plano(mensalista, horista, de_turno)? ");
+                        Planos novoPlano = TipoCliente.valueOf(scanner.next().toUpperCase());
+                        if (novoPlano == TipoCliente.DE_TURNO) {
+                            System.out.print("Qual turno você gostaria de escolher(manha, tarde ou noite)? ");
+                            TURNO turno = TURNO.valueOf(scanner.next().toUpperCase());
+                            System.out.println("Turno " + turno + " escolhido!");
+                            novoPlano.setTurno(turno);
+                        }
+                        cliente.TrocarPlano(novoPlano);
+                        System.out.println("Plano alterado!\n");
+                    } catch (NullPointerException | IllegalArgumentException e) {
+                        System.out.println("Erro: Tipo de plano inválido.");
+                    }
+                case 5:
                     System.out.println("Voltando ao menu principal.");
                     break;
                 default:
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                     break;
             }
-        } while (subEscolha != 4);
+        } while (subEscolha != 5);
     }
 
     public static void operacoesVeiculoSubMenu(Scanner scanner) {

@@ -138,7 +138,7 @@ public class Veiculo implements IDataToText {
         relatorio.append("\n         RELATORIO DE USOS DE VAGA\n");
         relatorio.append("-------------------------------------------");
         relatorio.append("\nVeiculo de placa: " + placa + "\n");
-        relatorio.append("Plano do Cliente: " + tipoCliente.getDesc() + "\n");
+        relatorio.append("Plano Atual do Cliente: " + tipoCliente.getDesc() + "\n");
         relatorio.append("-------------------------------------------\n");
         usos.stream()
                 .sorted(Comparator.comparingDouble(u -> u.valorPago()))
