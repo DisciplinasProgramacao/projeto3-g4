@@ -219,6 +219,7 @@ public class Cliente implements IDataToText {
 
     /**
      * Retorna o gasto total no mes do cliente formatado com seu id e nome.
+     *
      * @param mes
      * @return String
      */
@@ -261,6 +262,8 @@ public class Cliente implements IDataToText {
      * @param tipoCliente
      */
     public void TrocarPlano(Planos tipoCliente) {
+        if (this.tipoCliente == tipoCliente)
+            throw new IllegalArgumentException("O cliente " + nome + " já utiliza o plano  " + tipoCliente.getDesc());
         this.tipoCliente = tipoCliente;
         veiculos.values().forEach(v -> v.setPlano(tipoCliente));
     }

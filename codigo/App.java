@@ -218,9 +218,9 @@ public class App {
                             novoPlano.setTurno(turno);
                         }
                         cliente.TrocarPlano(novoPlano);
-                        System.out.println("Plano alterado!\n");
+                        System.out.println("Plano alterado com sucesso!");
                     } catch (NullPointerException | IllegalArgumentException e) {
-                        System.out.println("Erro: Tipo de plano inválido.");
+                        System.out.println("Erro: Tipo de plano inválido." + e.getMessage());
                     }
                 case 5:
                     System.out.println("Voltando ao menu principal.");
